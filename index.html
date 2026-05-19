@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>PAWA Bakery - Checklist System</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥖</text></svg>">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      min-height: 100vh;
+      padding-bottom: 100px;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #d4522c 0%, #c13b1a 100%);
+      color: white;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .logo {
+      font-size: 32px;
+    }
+
+    .header-text {
+      flex: 1;
+      padding: 0 15px;
+    }
+
+    .header-text h1 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .header-text p {
+      font-size: 14px;
+      opacity: 0.95;
+    }
+
+    .language-select {
+      background: #ffd700;
+      border: 2px solid #ffed4e;
+      color: #333;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    .form-section {
+      background: white;
+      padding: 20px;
+    }
+
+    .input-group {
+      margin-bottom: 16px;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 17px;
+      background: #fafafa;
+      transition: all 0.3s ease;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: #d4522c;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(212, 82, 44, 0.1);
+    }
+
+    input[type="date"] {
+      color: #333;
+      font-weight: 500;
+    }
+
+    .progress-bar {
+      margin: 0 20px 20px;
+      background: white;
+      border-radius: 12px;
+      padding: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      position: relative;
+      height: 36px;
+    }
+
+    .progress-fill {
+      background: linear-gradient(90deg, #4CAF50 0%, #45a049 100%);
+      height: 100%;
+      border-radius: 8px;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 0%;
+    }
+
+    .progress-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-weight: 700;
+      font-size: 15px;
+      color: #333;
+    }
+
+    .checklist {
+      padding: 0 20px;
+    }
+
+    .category {
+      background: white;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .category-title {
+      background: linear-gradient(135deg, #d4522c 0%, #c13b1a 100%);
+      color: white;
+      padding: 12px 16px;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .items {
+      padding: 12px;
+    }
+
+    .item {
+      display: flex;
+      align-items: flex-start;
+      padding: 12px;
+      margin-bottom: 8px;
+      background: #fafafa;
+      border-radius: 10px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .item:last-child {
+      margin-bottom: 0;
+    }
+
+    .item:active {
+      transform: scale(0.98);
+    }
+
+    .item.checked {
+      background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+      border-color: #4CAF50;
+    }
+
+    .item-checkbox {
+      width: 26px;
+      height: 26px;
+      border: 2px solid #d0d0d0;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-right: 10px;
+      background: white;
+      transition: all 0.3s ease;
+    }
+
+    .item.checked .item-checkbox {
+      background: #4CAF50;
+      border-color: #4CAF50;
+      color: white;
+    }
+
+    .item-text {
+      flex: 1;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #333;
+    }
+
+    .item.checked .item-text {
+      color: #2d5a2e;
+    }
+
+    .submit-section {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 16px 20px;
+      background: white;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+    }
+
+    .submit-button {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 19px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+    }
+
+    .submit-button:active {
+      transform: translateY(2px);
+    }
+
+    .submit-button:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .success-screen {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    .success-screen.show {
+      display: flex;
+    }
+
+    .success-card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px 32px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      text-align: center;
+      max-width: 420px;
+      width: 100%;
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 48px;
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+    }
+
+    .success-card h2 {
+      font-size: 25px;
+      color: #333;
+      margin-bottom: 28px;
+      font-weight: 700;
+    }
+
+    .success-details {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .detail-row:last-child {
+      border-bottom: none;
+    }
+
+    .detail-label {
+      font-weight: 600;
+      color: #666;
+      font-size: 17px;
+    }
+
+    .detail-value {
+      font-weight: 700;
+      color: #333;
+      font-size: 17px;
+    }
+
+    .screenshot-reminder {
+      background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+      border: 2px solid #ffd700;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 24px;
+      font-weight: 600;
+      color: #856404;
+      font-size: 17px;
+    }
+
+    .reset-button {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .reset-button:active {
+      transform: translateY(2px);
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script>
+const storeData = {
+  "PLAZA_SING": {
+    "opening": [
+      {
+        "category_zh": "1. 设备开机 / Equipment Start Up",
+        "category_en": "1. 设备开机 / Equipment Start Up",
+        "items": [
+          {
+            "zh": "开启设备电源：POS、Terminal、面包柜灯。",
+            "en": "Turn on equipment power: POS, terminal and bread cabinet light."
+          },
+          {
+            "zh": "清点备用金，并录入系统。",
+            "en": "Count the float cash and enter it into the system."
+          },
+          {
+            "zh": "测试 POS 与 Terminal 连接是否正常。",
+            "en": "Test that the POS and terminal connection works properly."
+          },
+          {
+            "zh": "擦干净收款台面和 EPOS 屏幕。",
+            "en": "Wipe the cashier counter and EPOS screen clean."
+          }
+        ]
+      },
+      {
+        "category_zh": "2. 物料准备 / Materials Preparation",
+        "category_en": "2. 物料准备 / Materials Preparation",
+        "items": [
+          {
+            "zh": "准备足够的面包袋和手提袋。",
+            "en": "Prepare enough bread bags and carrier bags."
+          },
+          {
+            "zh": "准备 3 块新的湿一次性抹布。",
+            "en": "Prepare 3 new disposable cloths and moisten them."
+          },
+          {
+            "zh": "将面包上架，并摆放价格标签。",
+            "en": "Put bread on shelves and place price tags."
+          },
+          {
+            "zh": "清点预订单数量，并按订单预留。",
+            "en": "Count pre order quantities and set them aside accordingly."
+          }
+        ]
+      },
+      {
+        "category_zh": "3. 营业准备 / Opening Preparation",
+        "category_en": "3. 营业准备 / Opening Preparation",
+        "items": [
+          {
+            "zh": "按照片要求摆放面包和对应价格标签。",
+            "en": "Place bread and matching price tags as shown in the Drive photos."
+          },
+          {
+            "zh": "10:30am 准时打开所有灯。",
+            "en": "Turn on all lights promptly at 10:30am."
+          },
+          {
+            "zh": "收起 1 米线，摆好广告牌，准备营业。",
+            "en": "Put away the 1 metre line, place advertising boards correctly and get ready for business."
+          }
+        ]
+      }
+    ],
+    "closing": [
+      {
+        "category_zh": "1. 店面清洁 / Store Cleaning",
+        "category_en": "1. 店面清洁 / Store Cleaning",
+        "items": [
+          {
+            "zh": "清洁面包柜：清面包屑、擦台面、更换油纸。",
+            "en": "Clean the bread cabinet: remove crumbs, wipe the counter and replace parchment paper."
+          },
+          {
+            "zh": "用湿抹布和无尘布擦玻璃 2 遍。",
+            "en": "Wipe glass twice using a wet cloth and lint free cloth."
+          },
+          {
+            "zh": "清洁货架物品，并摆放整齐。",
+            "en": "Clean shelf items and arrange them neatly."
+          },
+          {
+            "zh": "按照片要求摆好价格标签。",
+            "en": "Place price tags strictly according to the Drive photos."
+          },
+          {
+            "zh": "先扫地，再用加清洁剂的湿拖把拖地至少 2 遍。",
+            "en": "Sweep the floor, then mop at least twice with detergent water."
+          }
+        ]
+      },
+      {
+        "category_zh": "2. 设备及工具清洁 / Equipment and Tools Cleaning",
+        "category_en": "2. 设备及工具清洁 / Equipment and Tools Cleaning",
+        "items": [
+          {
+            "zh": "擦净面包盘和夹子并晾干；每周五彻底清洗。",
+            "en": "Wipe bread trays and tongs clean and dry them. Wash thoroughly every Friday."
+          },
+          {
+            "zh": "擦净水槽，并倒掉垃圾。",
+            "en": "Wipe the sink clean and dispose of rubbish."
+          }
+        ]
+      },
+      {
+        "category_zh": "3. 次日准备 / Preparation for the Next Day",
+        "category_en": "3. 次日准备 / Preparation for the Next Day",
+        "items": [
+          {
+            "zh": "准备足够的次日包装材料。",
+            "en": "Prepare enough packaging materials for the next day."
+          },
+          {
+            "zh": "按照片要求摆好次日价格标签。",
+            "en": "Place next day price tags correctly according to the Drive photos."
+          },
+          {
+            "zh": "检查并订购缺少物料；周五下单。",
+            "en": "Check and order missing materials. Order on Friday."
+          }
+        ]
+      },
+      {
+        "category_zh": "4. 关账及记录 / End Shift and Records",
+        "category_en": "4. 关账及记录 / End Shift and Records",
+        "items": [
+          {
+            "zh": "将 staffmeal 和 waste 录入系统。",
+            "en": "Enter staffmeal and waste into the system."
+          },
+          {
+            "zh": "清点钱箱，保留备用金，并将备用金金额写在当天销售总结小票上；现金差异需说明原因。",
+            "en": "Count the cash drawer, keep the float cash and write the float amount on the daily sales summary receipt. Explain any cash difference."
+          },
+          {
+            "zh": "检查 POS 是否需要更新；如有新版本，立即更新后再关机。",
+            "en": "Check whether POS needs an update. If a new version is available, update it before shutting down."
+          },
+          {
+            "zh": "EPOS 完成 End Shift，并将当天销售总结小票拍照上传 Pawa Cashier group。",
+            "en": "Complete End Shift in EPOS and upload a photo of the daily sales summary receipt to Pawa Cashier group."
+          },
+          {
+            "zh": "将多余现金存入公司账户，并上传存款小票照片至 Pawa Cashier group。",
+            "en": "Deposit extra cash into the company account and upload the deposit receipt photo to Pawa Cashier group."
+          },
+          {
+            "zh": "将重要物品锁在抽屉里，并藏好抽屉钥匙。",
+            "en": "Lock important items in the drawer and hide the drawer key properly."
+          },
+          {
+            "zh": "关闭空调、风扇、灯、音响、电子屏和 POS 电源；保留 Wi Fi 和招牌灯电源，按照片执行。",
+            "en": "Turn off air conditioner, fan, lights, speaker, digital screen and POS. Keep Wi Fi and sign lights on, following the Drive photos."
+          }
+        ]
+      },
+      {
+        "category_zh": "5. 收店收尾 / Closing Wrap Up",
+        "category_en": "5. 收店收尾 / Closing Wrap Up",
+        "items": [
+          {
+            "zh": "收好广告牌。",
+            "en": "Put away the advertising boards."
+          },
+          {
+            "zh": "将一米线围栏整齐拉到正确位置。",
+            "en": "Pull the rope barrier neatly to the correct position."
+          },
+          {
+            "zh": "拍照上传：面包柜含价格标签、地面、台面、店面整体。",
+            "en": "Upload photos of the bread cabinet with price tags, floor, counter and overall store to Pawa Cashier group."
+          }
+        ]
+      }
+    ]
+  },
+  "PLQ_MALL": {
+    "opening": [
+      {
+        "category_zh": "1. 设备开机 / Equipment Start Up",
+        "category_en": "1. 设备开机 / Equipment Start Up",
+        "items": [
+          {
+            "zh": "开启设备电源：POS、Terminal、面包柜灯。",
+            "en": "Turn on equipment power: POS, terminal and bread cabinet light."
+          },
+          {
+            "zh": "清点备用金，并录入系统。",
+            "en": "Count the float cash and enter it into the system."
+          },
+          {
+            "zh": "测试 POS 与 Terminal 连接是否正常。",
+            "en": "Test that the POS and terminal connection works properly."
+          },
+          {
+            "zh": "擦干净收款台面和 EPOS 屏幕。",
+            "en": "Wipe the cashier counter and EPOS screen clean."
+          }
+        ]
+      },
+      {
+        "category_zh": "2. 物料准备 / Materials Preparation",
+        "category_en": "2. 物料准备 / Materials Preparation",
+        "items": [
+          {
+            "zh": "准备足够的面包袋和手提袋。",
+            "en": "Prepare enough bread bags and carrier bags."
+          },
+          {
+            "zh": "准备 3 块新的湿一次性抹布。",
+            "en": "Prepare 3 new disposable cloths and moisten them."
+          },
+          {
+            "zh": "将面包上架，并摆放价格标签。",
+            "en": "Put bread on shelves and place price tags."
+          },
+          {
+            "zh": "清点预订单数量，并按订单预留。",
+            "en": "Count pre order quantities and set them aside accordingly."
+          }
+        ]
+      },
+      {
+        "category_zh": "3. 营业准备 / Opening Preparation",
+        "category_en": "3. 营业准备 / Opening Preparation",
+        "items": [
+          {
+            "zh": "按照片要求摆放面包和对应价格标签。",
+            "en": "Place bread and matching price tags as shown in the Drive photos."
+          },
+          {
+            "zh": "9:30am 准时打开所有灯。",
+            "en": "Turn on all lights promptly at 9:30am."
+          },
+          {
+            "zh": "收起 1 米线，摆好广告牌，准备营业。",
+            "en": "Put away the 1 metre line, place advertising boards correctly and get ready for business."
+          }
+        ]
+      }
+    ],
+    "closing": [
+      {
+        "category_zh": "1. 店面清洁 / Store Cleaning",
+        "category_en": "1. 店面清洁 / Store Cleaning",
+        "items": [
+          {
+            "zh": "清洁面包柜：清面包屑、擦台面、更换油纸。",
+            "en": "Clean the bread cabinet: remove crumbs, wipe the counter and replace parchment paper."
+          },
+          {
+            "zh": "用湿抹布和无尘布擦玻璃 2 遍。",
+            "en": "Wipe glass twice using a wet cloth and lint free cloth."
+          },
+          {
+            "zh": "清洁货架物品，并摆放整齐。",
+            "en": "Clean shelf items and arrange them neatly."
+          },
+          {
+            "zh": "按照片要求摆好价格标签。",
+            "en": "Place price tags strictly according to the Drive photos."
+          },
+          {
+            "zh": "先扫地，再用加清洁剂的湿拖把拖地至少 2 遍。",
+            "en": "Sweep the floor, then mop at least twice with detergent water."
+          }
+        ]
+      },
+      {
+        "category_zh": "2. 设备及工具清洁 / Equipment and Tools Cleaning",
+        "category_en": "2. 设备及工具清洁 / Equipment and Tools Cleaning",
+        "items": [
+          {
+            "zh": "擦净面包盘和夹子并晾干；每周五彻底清洗。",
+            "en": "Wipe bread trays and tongs clean and dry them. Wash thoroughly every Friday."
+          },
+          {
+            "zh": "擦净水槽，并倒掉垃圾。",
+            "en": "Wipe the sink clean and dispose of rubbish."
+          }
+        ]
+      },
+      {
+        "category_zh": "3. 次日准备 / Preparation for the Next Day",
+        "category_en": "3. 次日准备 / Preparation for the Next Day",
+        "items": [
+          {
+            "zh": "准备足够的次日包装材料。",
+            "en": "Prepare enough packaging materials for the next day."
+          },
+          {
+            "zh": "按照片要求摆好次日价格标签。",
+            "en": "Place next day price tags correctly according to the Drive photos."
+          },
+          {
+            "zh": "检查并订购缺少物料；周五下单。",
+            "en": "Check and order missing materials. Order on Friday."
+          }
+        ]
+      },
+      {
+        "category_zh": "4. 关账及记录 / End Shift and Records",
+        "category_en": "4. 关账及记录 / End Shift and Records",
+        "items": [
+          {
+            "zh": "将 staffmeal 和 waste 录入系统。",
+            "en": "Enter staffmeal and waste into the system."
+          },
+          {
+            "zh": "清点钱箱，保留备用金，并将备用金金额写在当天销售总结小票上；现金差异需说明原因。",
+            "en": "Count the cash drawer, keep the float cash and write the float amount on the daily sales summary receipt. Explain any cash difference."
+          },
+          {
+            "zh": "检查 POS 是否需要更新；如有新版本，立即更新后再关机。",
+            "en": "Check whether POS needs an update. If a new version is available, update it before shutting down."
+          },
+          {
+            "zh": "EPOS 完成 End Shift，并将当天销售总结小票拍照上传 Pawa Cashier group。",
+            "en": "Complete End Shift in EPOS and upload a photo of the daily sales summary receipt to Pawa Cashier group."
+          },
+          {
+            "zh": "将多余现金存入公司账户，并上传存款小票照片至 Pawa Cashier group。",
+            "en": "Deposit extra cash into the company account and upload the deposit receipt photo to Pawa Cashier group."
+          },
+          {
+            "zh": "将重要物品锁在抽屉里，并藏好抽屉钥匙。",
+            "en": "Lock important items in the drawer and hide the drawer key properly."
+          },
+          {
+            "zh": "关闭空调、风扇、灯、音响、电子屏和 POS 电源；保留 Wi Fi 和招牌灯电源，按照片执行。",
+            "en": "Turn off air conditioner, fan, lights, speaker, digital screen and POS. Keep Wi Fi and sign lights on, following the Drive photos."
+          }
+        ]
+      },
+      {
+        "category_zh": "5. 收店收尾 / Closing Wrap Up",
+        "category_en": "5. 收店收尾 / Closing Wrap Up",
+        "items": [
+          {
+            "zh": "收好广告牌。",
+            "en": "Put away the advertising boards."
+          },
+          {
+            "zh": "将绳带围栏整齐拉到正确位置。",
+            "en": "Pull the rope barrier neatly to the correct position."
+          },
+          {
+            "zh": "拍照上传：面包柜含价格标签、地面、台面、店面整体。",
+            "en": "Upload photos of the bread cabinet with price tags, floor, counter and overall store to Pawa Cashier group."
+          }
+        ]
+      }
+    ]
+  },
+  "PLUS": {
+    "opening": [
+      {
+        "category_zh": "1. 设备开机 / Equipment Start Up",
+        "category_en": "1. 设备开机 / Equipment Start Up",
+        "items": [
+          {
+            "zh": "开启设备电源：POS、刷卡机、小冰箱、音响、面包柜灯和风扇。",
+            "en": "Turn on equipment power: POS, card machine, small refrigerator, speaker, bread cabinet lights and fans."
+          },
+          {
+            "zh": "清点备用金，并录入系统。",
+            "en": "Count the float cash and enter it into the system."
+          },
+          {
+            "zh": "测试 POS 与 Terminal 连接是否正常。",
+            "en": "Test that the POS and terminal connection works properly."
+          },
+          {
+            "zh": "连接音响，并用 iPad 播放英文歌曲。",
+            "en": "Connect the speaker and play English songs on the iPad."
+          }
+        ]
+      },
+      {
+        "category_zh": "2. 物料准备 / Materials Preparation",
+        "category_en": "2. 物料准备 / Materials Preparation",
+        "items": [
+          {
+            "zh": "准备足够的面包袋和手提袋。",
+            "en": "Prepare enough bread bags and carrier bags."
+          },
+          {
+            "zh": "准备 4 块新的湿一次性抹布。",
+            "en": "Prepare 4 new disposable cloths and moisten them."
+          },
+          {
+            "zh": "清点预订单数量，并按订单预留。",
+            "en": "Count pre order quantities and set them aside accordingly."
+          }
+        ]
+      },
+      {
+        "category_zh": "3. 店面整理 / Store Tidying",
+        "category_en": "3. 店面整理 / Store Tidying",
+        "items": [
+          {
+            "zh": "擦干净收款台面和 EPOS 屏幕。",
+            "en": "Wipe the cashier counter and EPOS screen clean."
+          },
+          {
+            "zh": "将广告牌摆放到正确位置。",
+            "en": "Place advertising boards in the correct position."
+          },
+          {
+            "zh": "整理饼干并擦拭干净。",
+            "en": "Arrange the cookies neatly and wipe them clean."
+          }
+        ]
+      },
+      {
+        "category_zh": "4. 营业准备 / Opening Preparation",
+        "category_en": "4. 营业准备 / Opening Preparation",
+        "items": [
+          {
+            "zh": "按照片要求将面包放到正确货架位置，并摆好对应价格标签。",
+            "en": "Place bread and matching price tags correctly according to the Drive photos."
+          },
+          {
+            "zh": "8:00am 准时打开所有灯。",
+            "en": "Turn on all lights promptly at 8:00am."
+          },
+          {
+            "zh": "开门，并将门状态设为 OPEN。",
+            "en": "Open the door and set the door status to OPEN."
+          }
+        ]
+      }
+    ],
+    "closing": [
+      {
+        "category_zh": "1. 店面清洁 / Store Cleaning",
+        "category_en": "1. 店面清洁 / Store Cleaning",
+        "items": [
+          {
+            "zh": "清洁面包柜：清面包屑、擦台面、更换油纸。",
+            "en": "Clean the bread cabinet: remove crumbs, wipe the counter and replace parchment paper."
+          },
+          {
+            "zh": "用无油湿抹布和无尘布擦面包柜玻璃 2 遍。",
+            "en": "Wipe bread cabinet glass twice using an oil free wet cloth and lint free cloth."
+          },
+          {
+            "zh": "清洁货架物品，并摆放整齐。",
+            "en": "Clean shelf items and arrange them neatly."
+          },
+          {
+            "zh": "按照片要求摆好价格标签。",
+            "en": "Place price tags strictly according to the Drive photos."
+          },
+          {
+            "zh": "先扫地，再用加清洁剂的湿拖把拖地至少 2 遍。",
+            "en": "Sweep the floor, then mop at least twice with detergent water."
+          }
+        ]
+      },
+      {
+        "category_zh": "2. 设备及工具清洁 / Equipment and Tools Cleaning",
+        "category_en": "2. 设备及工具清洁 / Equipment and Tools Cleaning",
+        "items": [
+          {
+            "zh": "清洗所有铁面包盘并晾干。",
+            "en": "Wash all iron bread trays and dry them."
+          },
+          {
+            "zh": "擦净面包盘和夹子；每周五彻底清洗所有盘子和夹子。",
+            "en": "Wipe bread trays and tongs clean. Wash all trays and tongs thoroughly every Friday."
+          },
+          {
+            "zh": "清洁切片机，并擦干。",
+            "en": "Clean the slicer and wipe it dry."
+          },
+          {
+            "zh": "擦净水槽，并倒掉垃圾。",
+            "en": "Wipe the sink clean and dispose of rubbish."
+          }
+        ]
+      },
+      {
+        "category_zh": "3. 次日准备 / Preparation for the Next Day",
+        "category_en": "3. 次日准备 / Preparation for the Next Day",
+        "items": [
+          {
+            "zh": "准备足够的次日包装材料。",
+            "en": "Prepare enough packaging materials for the next day."
+          },
+          {
+            "zh": "检查并订购缺少物料；周五下单。",
+            "en": "Check and order missing materials. Order on Friday."
+          }
+        ]
+      },
+      {
+        "category_zh": "4. 关账及记录 / End Shift and Records",
+        "category_en": "4. 关账及记录 / End Shift and Records",
+        "items": [
+          {
+            "zh": "确认所有 staffmeal 和 waste 已录入系统。",
+            "en": "Make sure all staffmeal and waste are entered into the system."
+          },
+          {
+            "zh": "清点钱箱，保留备用金，并将备用金金额写在当天销售总结小票上；现金差异需说明原因。",
+            "en": "Count the cash drawer, keep the float cash and write the float amount on the daily sales summary receipt. Explain any cash difference."
+          },
+          {
+            "zh": "检查 POS 是否需要更新；如有新版本，立即更新后再关机。",
+            "en": "Check whether POS needs an update. If a new version is available, update it before shutting down."
+          },
+          {
+            "zh": "EPOS 完成 End Shift，并将当天销售总结小票拍照上传 Pawa Cashier group。",
+            "en": "Complete End Shift in EPOS and upload a photo of the daily sales summary receipt to Pawa Cashier group."
+          },
+          {
+            "zh": "将多余现金存入公司账户，并上传存款小票照片至 Pawa Cashier group。",
+            "en": "Deposit extra cash into the company account and upload the deposit receipt photo to Pawa Cashier group."
+          }
+        ]
+      },
+      {
+        "category_zh": "5. 收店收尾 / Closing Wrap Up",
+        "category_en": "5. 收店收尾 / Closing Wrap Up",
+        "items": [
+          {
+            "zh": "关闭空调、风扇、灯、音响、电子屏和 POS 电源；保留 Wi Fi 电源，按照片执行。",
+            "en": "Turn off air conditioner, fan, lights, speaker, digital screen and POS. Keep Wi Fi on, following the Drive photos."
+          },
+          {
+            "zh": "收好广告牌；每周五收到店内。",
+            "en": "Put away advertising boards. Bring them into the shop on Friday."
+          },
+          {
+            "zh": "拍照上传：面包柜含价格标签、地面、台面、店面整体。",
+            "en": "Upload photos of the bread cabinet with price tags, floor, counter and overall store to Pawa Cashier group."
+          },
+          {
+            "zh": "关门，将门状态设为 LOCK，并把钥匙放入门口木盒。",
+            "en": "Close the door, set the door status to LOCK and put the key in the wooden box at the door gate."
+          }
+        ]
+      }
+    ]
+  },
+  "STAR_VISTA": {
+    "opening": [
+      {
+        "category_zh": "1. 设备开机 / Equipment Start Up",
+        "category_en": "1. 设备开机 / Equipment Start Up",
+        "items": [
+          {
+            "zh": "开启设备电源：POS、刷卡机、咖啡机、面包柜和灯光。",
+            "en": "Turn on equipment power: POS, card machine, coffee machine, bread cabinet and lights."
+          },
+          {
+            "zh": "清点备用金，并录入系统。",
+            "en": "Count the float cash and enter it into the system."
+          },
+          {
+            "zh": "测试 POS 与 Terminal 连接是否正常。",
+            "en": "Test that the POS and terminal connection works properly."
+          },
+          {
+            "zh": "擦干净收款台面和 EPOS 屏幕。",
+            "en": "Wipe the cashier counter and EPOS screen clean."
+          },
+          {
+            "zh": "打开音响，连接手机蓝牙，播放英文音乐。",
+            "en": "Turn on the speaker, connect phone Bluetooth and play English music."
+          }
+        ]
+      },
+      {
+        "category_zh": "2. 物料准备 / Materials Preparation",
+        "category_en": "2. 物料准备 / Materials Preparation",
+        "items": [
+          {
+            "zh": "确认面包袋、大号和小号手提袋充足。",
+            "en": "Make sure bread bags and large and small carrier bags are sufficient."
+          },
+          {
+            "zh": "确认磨豆机咖啡豆、咖啡杯和杯盖等物料充足。",
+            "en": "Make sure coffee beans in the grinder, coffee cups, lids and related materials are sufficient."
+          },
+          {
+            "zh": "确认茶包、果酱、冷柜牛奶和直饮冰水充足。",
+            "en": "Make sure tea bags, jam, chilled milk and drinking ice water are sufficient."
+          }
+        ]
+      },
+      {
+        "category_zh": "3. 营业准备 / Opening Preparation",
+        "category_en": "3. 营业准备 / Opening Preparation",
+        "items": [
+          {
+            "zh": "摆整齐桌椅，并确认桌面和椅面干净。",
+            "en": "Arrange tables and chairs neatly, and make sure table tops and chair surfaces are clean."
+          },
+          {
+            "zh": "收起 1 米线，摆好广告牌，并压住广告牌支架底部防风。",
+            "en": "Put away the 1 metre line, place advertising boards correctly and weigh down the stand base to prevent wind."
+          },
+          {
+            "zh": "面包上架并放到正确位置，确认价格牌无缺失。",
+            "en": "Put bread on shelves in the correct positions and make sure no price tags are missing."
+          },
+          {
+            "zh": "打开 Grab Terminal，设置可售卖的面包和数量。",
+            "en": "Turn on Grab Terminal and set the available bread items and quantities."
+          }
+        ]
+      }
+    ],
+    "closing": [
+      {
+        "category_zh": "1. 店面清洁 / Store Cleaning",
+        "category_en": "1. 店面清洁 / Store Cleaning",
+        "items": [
+          {
+            "zh": "清洁面包柜：清面包屑、擦台面、更换油纸。",
+            "en": "Clean the bread cabinet: remove crumbs, wipe the counter and replace parchment paper."
+          },
+          {
+            "zh": "用无油湿抹布和无尘布擦面包柜玻璃 2 遍。",
+            "en": "Wipe bread cabinet glass twice using an oil free wet cloth and lint free cloth."
+          },
+          {
+            "zh": "按位置要求摆好价格标签。",
+            "en": "Place price tags strictly in the required positions."
+          },
+          {
+            "zh": "倒掉蛋糕柜积水盒，并关闭电源。",
+            "en": "Empty the cake cabinet water tray and turn off the power."
+          },
+          {
+            "zh": "将椅子倒放在桌面上；先扫地，再用加清洁剂的湿拖把拖干净。",
+            "en": "Place chairs upside down on tables. Sweep the floor, then mop with detergent water."
+          }
+        ]
+      },
+      {
+        "category_zh": "2. 设备及工具清洁 / Equipment and Tools Cleaning",
+        "category_en": "2. 设备及工具清洁 / Equipment and Tools Cleaning",
+        "items": [
+          {
+            "zh": "按流程清洁咖啡机。",
+            "en": "Clean the coffee machine according to the procedure."
+          },
+          {
+            "zh": "擦净水槽，并倒掉垃圾。",
+            "en": "Wipe the sink clean and dispose of rubbish."
+          },
+          {
+            "zh": "擦净面包盘和夹子；每周五用洗洁精全部清洗并晾干。",
+            "en": "Wipe bread trays and tongs clean. Every Friday, wash all trays and tongs with detergent and dry them."
+          }
+        ]
+      },
+      {
+        "category_zh": "3. 关账及记录 / End Shift and Records",
+        "category_en": "3. 关账及记录 / End Shift and Records",
+        "items": [
+          {
+            "zh": "确认所有 staffmeal 和 waste 已录入系统。",
+            "en": "Make sure all staffmeal and waste are entered into the system."
+          },
+          {
+            "zh": "清点钱箱，保留备用金，并将备用金金额写在当天销售总结小票上；现金差异需说明原因。",
+            "en": "Count the cash drawer, keep the float cash and write the float amount on the daily sales summary receipt. Explain any cash difference."
+          },
+          {
+            "zh": "将多余现金包好并锁进抽屉，记录当天现金金额到现金记录表，并截图上传 Pawa Cashier group。",
+            "en": "Wrap extra cash and lock it in the drawer. Record the daily cash amount in the cash record sheet and upload a screenshot to Pawa Cashier group."
+          },
+          {
+            "zh": "EPOS 完成 End Shift，并将当天销售总结小票拍照上传 Pawa Cashier group。",
+            "en": "Complete End Shift in EPOS and upload a photo of the daily sales summary receipt to Pawa Cashier group."
+          },
+          {
+            "zh": "拍照上传 Grab Terminal 当天销售金额至 Pawa Cashier group。",
+            "en": "Take a photo of the Grab Terminal daily sales amount and upload it to Pawa Cashier group."
+          },
+          {
+            "zh": "将客服手机和重要物品锁在抽屉里，并藏好抽屉钥匙。",
+            "en": "Lock the customer service phone and important items in the drawer, and hide the drawer key properly."
+          },
+          {
+            "zh": "关闭空调、风扇、灯、音响、电子屏和 POS 电源；保留 Wi Fi 和招牌灯电源，按照片执行。",
+            "en": "Turn off air conditioner, fan, lights, speaker, digital screen and POS. Keep Wi Fi and sign lights on, following the Drive photos."
+          }
+        ]
+      },
+      {
+        "category_zh": "4. 次日准备 / Preparation for the Next Day",
+        "category_en": "4. 次日准备 / Preparation for the Next Day",
+        "items": [
+          {
+            "zh": "准备足够的次日包装材料。",
+            "en": "Prepare enough packaging materials for the next day."
+          },
+          {
+            "zh": "检查并订购缺少物料；周一、周三、周五下单。",
+            "en": "Check and order missing materials on Monday, Wednesday and Friday."
+          },
+          {
+            "zh": "给音响设备充电。",
+            "en": "Charge the audio equipment."
+          }
+        ]
+      },
+      {
+        "category_zh": "5. 收店收尾 / Closing Wrap Up",
+        "category_en": "5. 收店收尾 / Closing Wrap Up",
+        "items": [
+          {
+            "zh": "收好广告牌，放在餐盘回收处桌面上并压好，防止夜间被风吹走。",
+            "en": "Put away advertising boards on the tray return table and weigh them down to prevent wind at night."
+          },
+          {
+            "zh": "用桌子和 1 米线围好门店，防止陌生人进入。",
+            "en": "Use tables and the 1 metre line to block the store and prevent strangers from entering."
+          },
+          {
+            "zh": "拍照上传：面包柜含价格标签、咖啡机、桌椅、地面、台面、店面整体。",
+            "en": "Upload photos of the bread cabinet with price tags, coffee machine, tables and chairs, floor, counter and overall store to Pawa Cashier group."
+          }
+        ]
+      }
+    ]
+  },
+  "SUNTEC_CITY": {
+    "opening": [
+      {
+        "category_zh": "1. 设备开机 / Equipment Start Up",
+        "category_en": "1. 设备开机 / Equipment Start Up",
+        "items": [
+          {
+            "zh": "开启设备电源：POS、刷卡机、咖啡机、面包柜和灯光。",
+            "en": "Turn on equipment power: POS, card machine, coffee machine, bread cabinet and lights."
+          },
+          {
+            "zh": "清点备用金，并录入系统。",
+            "en": "Count the float cash and enter it into the system."
+          },
+          {
+            "zh": "测试 POS 与 Terminal 连接是否正常。",
+            "en": "Test that the POS and terminal connection works properly."
+          },
+          {
+            "zh": "擦干净收款台面和 EPOS 屏幕。",
+            "en": "Wipe the cashier counter and EPOS screen clean."
+          }
+        ]
+      },
+      {
+        "category_zh": "2. 物料准备 / Materials Preparation",
+        "category_en": "2. 物料准备 / Materials Preparation",
+        "items": [
+          {
+            "zh": "确认面包袋、大号和小号手提袋充足。",
+            "en": "Make sure bread bags and large and small carrier bags are sufficient."
+          },
+          {
+            "zh": "确认磨豆机咖啡豆、咖啡杯和杯盖等物料充足。",
+            "en": "Make sure coffee beans in the grinder, coffee cups, lids and related materials are sufficient."
+          },
+          {
+            "zh": "确认茶包、果酱、小冰箱牛奶和直饮冰水充足。",
+            "en": "Make sure tea bags, jam, small refrigerator milk and drinking ice water are sufficient."
+          },
+          {
+            "zh": "准备 4 块一次性湿抹布。",
+            "en": "Prepare 4 disposable wet cloths."
+          }
+        ]
+      },
+      {
+        "category_zh": "3. 营业准备 / Opening Preparation",
+        "category_en": "3. 营业准备 / Opening Preparation",
+        "items": [
+          {
+            "zh": "收起 1 米线，并将广告牌摆放到正确位置。",
+            "en": "Put away the 1 metre line and place advertising boards correctly."
+          },
+          {
+            "zh": "面包上架并放到正确位置，确认价格牌无缺失。",
+            "en": "Put bread on shelves in the correct positions and make sure no price tags are missing."
+          }
+        ]
+      }
+    ],
+    "closing": [
+      {
+        "category_zh": "1. 店面清洁 / Store Cleaning",
+        "category_en": "1. 店面清洁 / Store Cleaning",
+        "items": [
+          {
+            "zh": "清洁面包柜：清面包屑、擦台面、更换油纸。",
+            "en": "Clean the bread cabinet: remove crumbs, wipe the counter and replace parchment paper."
+          },
+          {
+            "zh": "用无油湿抹布和无尘布擦面包柜玻璃 2 遍。",
+            "en": "Wipe bread cabinet glass twice using an oil free wet cloth and lint free cloth."
+          },
+          {
+            "zh": "清洁货架物品，并摆放整齐。",
+            "en": "Clean shelf items and arrange them neatly."
+          },
+          {
+            "zh": "按照片要求摆好价格标签。",
+            "en": "Place price tags strictly according to the Drive photos."
+          },
+          {
+            "zh": "先扫地，再用加清洁剂的湿拖把拖地至少 2 遍。",
+            "en": "Sweep the floor, then mop at least twice with detergent water."
+          }
+        ]
+      },
+      {
+        "category_zh": "2. 设备及工具清洁 / Equipment and Tools Cleaning",
+        "category_en": "2. 设备及工具清洁 / Equipment and Tools Cleaning",
+        "items": [
+          {
+            "zh": "按流程清洁咖啡机。",
+            "en": "Clean the coffee machine according to the procedure."
+          },
+          {
+            "zh": "擦净水槽，并倒掉垃圾。",
+            "en": "Wipe the sink clean and dispose of rubbish."
+          },
+          {
+            "zh": "擦净面包盘和夹子；每周五用洗洁精全部清洗并晾干。",
+            "en": "Wipe bread trays and tongs clean. Every Friday, wash all trays and tongs with detergent and dry them."
+          }
+        ]
+      },
+      {
+        "category_zh": "3. 次日准备 / Preparation for the Next Day",
+        "category_en": "3. 次日准备 / Preparation for the Next Day",
+        "items": [
+          {
+            "zh": "准备足够的次日包装材料。",
+            "en": "Prepare enough packaging materials for the next day."
+          },
+          {
+            "zh": "检查并订购缺少物料；周一、周三、周五下单。",
+            "en": "Check and order missing materials on Monday, Wednesday and Friday."
+          },
+          {
+            "zh": "给音响设备充电。",
+            "en": "Charge the audio equipment."
+          }
+        ]
+      },
+      {
+        "category_zh": "4. 关账及记录 / End Shift and Records",
+        "category_en": "4. 关账及记录 / End Shift and Records",
+        "items": [
+          {
+            "zh": "确认所有 staffmeal 和 waste 已录入系统。",
+            "en": "Make sure all staffmeal and waste are entered into the system."
+          },
+          {
+            "zh": "清点钱箱，保留备用金，并将备用金金额写在当天销售总结小票上；现金差异需说明原因。",
+            "en": "Count the cash drawer, keep the float cash and write the float amount on the daily sales summary receipt. Explain any cash difference."
+          },
+          {
+            "zh": "检查 POS 是否需要更新；如有新版本，立即更新后再关机。",
+            "en": "Check whether POS needs an update. If a new version is available, update it before shutting down."
+          },
+          {
+            "zh": "EPOS 完成 End Shift，并将当天销售总结小票拍照上传 Pawa Cashier group。",
+            "en": "Complete End Shift in EPOS and upload a photo of the daily sales summary receipt to Pawa Cashier group."
+          },
+          {
+            "zh": "将多余现金存入公司账户，并上传存款小票照片至 Pawa Cashier group。",
+            "en": "Deposit extra cash into the company account and upload the deposit receipt photo to Pawa Cashier group."
+          },
+          {
+            "zh": "将重要物品锁在抽屉里，并藏好抽屉钥匙。",
+            "en": "Lock important items in the drawer and hide the drawer key properly."
+          },
+          {
+            "zh": "关闭空调、风扇、灯、音响、电子屏和 POS 电源；保留 Wi Fi 和招牌灯电源，按照片执行。",
+            "en": "Turn off air conditioner, fan, lights, speaker, digital screen and POS. Keep Wi Fi and sign lights on, following the Drive photos."
+          }
+        ]
+      },
+      {
+        "category_zh": "5. 收店收尾 / Closing Wrap Up",
+        "category_en": "5. 收店收尾 / Closing Wrap Up",
+        "items": [
+          {
+            "zh": "收好广告牌和 1 米线，并放到正确位置。",
+            "en": "Put away advertising boards and the 1 metre line, and place them correctly."
+          },
+          {
+            "zh": "用面包架子车挡住进出口，防止陌生人进入。",
+            "en": "Use the bread rack trolley to block the entrance and exit to prevent strangers from entering."
+          },
+          {
+            "zh": "拍照上传：面包柜含价格标签、咖啡机、桌椅、地面、台面、店面整体。",
+            "en": "Upload photos of the bread cabinet with price tags, coffee machine, tables and chairs, floor, counter and overall store to Pawa Cashier group."
+          }
+        ]
+      }
+    ]
+  }
+};
+    // 翻译
+    const translations = {
+      zh: {
+        title: 'PAWA BAKERY',
+        subtitle: '检查记录系统',
+        employeeName: '员工姓名',
+        employeeNamePlaceholder: '请输入员工姓名（自动大写）',
+        date: '日期',
+        store: '门店',
+        selectStore: '请选择门店',
+        selectType: '选择类型',
+        selectTypePrompt: '请选择类型',
+        opening: '开店流程',
+        closing: '关店流程',
+        submit: '提交',
+        submissionSuccess: '提交成功！',
+        pleaseScreenshot: '请截图保存此记录',
+        completedAt: '完成时间',
+        reset: '重新开始'
+      },
+      en: {
+        title: 'PAWA BAKERY',
+        subtitle: 'Checklist System',
+        employeeName: 'Employee Name',
+        employeeNamePlaceholder: 'Enter employee name (auto uppercase)',
+        date: 'Date',
+        store: 'Store',
+        selectStore: 'Select Store',
+        selectType: 'Select Type',
+        selectTypePrompt: 'Select Type',
+        opening: 'Opening',
+        closing: 'Closing',
+        submit: 'Submit',
+        submissionSuccess: 'Success!',
+        pleaseScreenshot: 'Please screenshot this record',
+        completedAt: 'Completed At',
+        reset: 'Start Over'
+      }
+    };
+
+    // 状态
+    let state = {
+      language: 'zh',
+      employeeName: '',
+      selectedDate: getTodayDate(),
+      store: '',
+      checklistType: '',
+      checkedItems: {},
+      submitted: false,
+      submitTime: ''
+    };
+
+    function getTodayDate() {
+      const today = new Date();
+      return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    }
+
+    function render() {
+      if (state.submitted) {
+        renderSuccessScreen();
+        return;
+      }
+
+      const t = translations[state.language];
+      let currentItems = [];
+      
+      if (state.store && state.checklistType && storeData[state.store]) {
+        currentItems = storeData[state.store][state.checklistType] || [];
+      }
+
+      const totalItems = currentItems.reduce((sum, cat) => sum + cat.items.length, 0);
+      const completedItems = Object.values(state.checkedItems).filter(Boolean).length;
+      const progress = totalItems > 0 ? (completedItems / totalItems) * 100 : 0;
+      const canSubmit = completedItems === totalItems && state.employeeName.trim().length > 0 && state.store && state.checklistType;
+
+      document.getElementById('app').innerHTML = `
+        <div class="header">
+          <div class="logo">🥖</div>
+          <div class="header-text">
+            <h1>${t.title}</h1>
+            <p>${t.subtitle}</p>
+          </div>
+          <select class="language-select" onchange="changeLanguage(this.value)">
+            <option value="zh" ${state.language === 'zh' ? 'selected' : ''}>中文</option>
+            <option value="en" ${state.language === 'en' ? 'selected' : ''}>English</option>
+          </select>
+        </div>
+
+        <div class="form-section">
+          <div class="input-group">
+            <label>${t.employeeName}</label>
+            <input
+              id="nameInput"
+              type="text"
+              value="${state.employeeName}"
+              oninput="updateEmployeeName(this.value)"
+              placeholder="${t.employeeNamePlaceholder}"
+              class="input-field"
+              style="text-transform: uppercase;"
+            />
+          </div>
+
+          <div class="input-group">
+            <label>${t.date}</label>
+            <input
+              type="date"
+              value="${state.selectedDate}"
+              onchange="updateDate(this.value)"
+              class="input-field"
+            />
+          </div>
+
+          <div class="input-group">
+            <label>${t.store}</label>
+            <select class="input-field" onchange="changeStore(this.value)">
+              <option value="">${t.selectStore}</option>
+              <option value="PLAZA_SING" ${state.store === 'PLAZA_SING' ? 'selected' : ''}>PLAZA SING</option>
+              <option value="PLQ_MALL" ${state.store === 'PLQ_MALL' ? 'selected' : ''}>PLQ MALL</option>
+              <option value="PLUS" ${state.store === 'PLUS' ? 'selected' : ''}>PLUS</option>
+              <option value="STAR_VISTA" ${state.store === 'STAR_VISTA' ? 'selected' : ''}>STAR VISTA</option>
+              <option value="SUNTEC_CITY" ${state.store === 'SUNTEC_CITY' ? 'selected' : ''}>SUNTEC CITY</option>
+            </select>
+          </div>
+
+          ${state.store ? `
+            <div class="input-group">
+              <label>${t.selectType}</label>
+              <select class="input-field" onchange="changeChecklistType(this.value)">
+                <option value="">${t.selectTypePrompt}</option>
+                <option value="opening" ${state.checklistType === 'opening' ? 'selected' : ''}>${t.opening}</option>
+                <option value="closing" ${state.checklistType === 'closing' ? 'selected' : ''}>${t.closing}</option>
+              </select>
+            </div>
+          ` : ''}
+        </div>
+
+        ${state.checklistType ? `
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: ${progress}%"></div>
+            <div class="progress-text">${completedItems} / ${totalItems}</div>
+          </div>
+
+          <div class="checklist">
+            ${currentItems.map((category, catIndex) => `
+              <div class="category">
+                <h3 class="category-title">${state.language === 'zh' ? category.category_zh : category.category_en}</h3>
+                <div class="items">
+                  ${category.items.map((item, itemIndex) => {
+                    const key = `${catIndex}-${itemIndex}`;
+                    const isChecked = state.checkedItems[key] || false;
+                    return `
+                      <div class="item ${isChecked ? 'checked' : ''}" onclick="toggleItem('${key}')">
+                        <div class="item-checkbox">
+                          ${isChecked ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>' : ''}
+                        </div>
+                        <div class="item-text">${state.language === 'zh' ? item.zh : item.en}</div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="submit-section">
+            <button
+              id="submitBtn"
+              onclick="handleSubmit()"
+              ${!canSubmit ? 'disabled' : ''}
+              class="submit-button"
+            >
+              ${t.submit}
+            </button>
+          </div>
+        ` : ''}
+      `;
+    }
+
+    function renderSuccessScreen() {
+      const t = translations[state.language];
+      const storeDisplayName = state.store.replace('_', ' ');
+      const checklistTypeText = state.checklistType === 'opening' ? t.opening : t.closing;
+
+      document.getElementById('app').innerHTML = `
+        <div class="success-screen show">
+          <div class="success-card">
+            <div class="success-icon">✓</div>
+            <h2>${t.submissionSuccess}</h2>
+            <div class="success-details">
+              <div class="detail-row">
+                <span class="detail-label">${t.employeeName}:</span>
+                <span class="detail-value">${state.employeeName}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">${t.date}:</span>
+                <span class="detail-value">${state.selectedDate}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">${t.store}:</span>
+                <span class="detail-value">${storeDisplayName}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">${t.selectType}:</span>
+                <span class="detail-value">${checklistTypeText}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">${t.completedAt}:</span>
+                <span class="detail-value">${state.submitTime}</span>
+              </div>
+            </div>
+            <div class="screenshot-reminder">
+              📸 ${t.pleaseScreenshot}
+            </div>
+            <button onclick="handleReset()" class="reset-button">
+              ${t.reset}
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // 事件处理
+    function changeLanguage(lang) {
+      state.language = lang;
+      render();
+    }
+
+    function updateEmployeeName(value) {
+      const uppercaseValue = value.toUpperCase().replace(/[^A-Z\s]/g, '');
+      state.employeeName = uppercaseValue;
+      const input = document.getElementById('nameInput');
+      if (input && input.value !== uppercaseValue) {
+        input.value = uppercaseValue;
+      }
+    }
+
+    function updateDate(value) {
+      state.selectedDate = value;
+      render();
+    }
+
+    function changeStore(value) {
+      state.store = value;
+      state.checklistType = '';
+      state.checkedItems = {};
+      render();
+    }
+
+    function changeChecklistType(value) {
+      state.checklistType = value;
+      state.checkedItems = {};
+      render();
+    }
+
+    function toggleItem(key) {
+      if (state.submitted) return;
+      state.checkedItems[key] = !state.checkedItems[key];
+      render();
+    }
+
+    function handleSubmit() {
+      const now = new Date();
+      state.submitTime = now.toLocaleString(state.language === 'zh' ? 'zh-CN' : 'en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      });
+
+      const currentItems = storeData[state.store][state.checklistType];
+      const totalItems = currentItems.reduce((sum, cat) => sum + cat.items.length, 0);
+      const completedItems = Object.values(state.checkedItems).filter(Boolean).length;
+
+      const submissionData = {
+        timestamp: now.toISOString(),
+        employeeName: state.employeeName,
+        date: state.selectedDate,
+        store: state.store.replace('_', ' '),
+        checklistType: state.checklistType === 'opening' ?
+          (state.language === 'zh' ? '开店流程' : 'Opening') :
+          (state.language === 'zh' ? '关店流程' : 'Closing'),
+        completedItems: completedItems,
+        totalItems: totalItems,
+        language: state.language
+      };
+
+      // 提交到 Google Sheets
+      const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwXz-GCh_sEdarsabEhURPAhGU7sX5SoP1y_WJhTylI3AsIcN5zMrUww4xad_vAAQ5zNg/exec';
+      
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submissionData)
+      }).then(() => {
+        console.log('✅ Data submitted to Google Sheets');
+      }).catch(error => {
+        console.error('❌ Error submitting to Google Sheets:', error);
+      });
+
+      state.submitted = true;
+      render();
+    }
+
+    function handleReset() {
+      state = {
+        language: state.language,
+        employeeName: '',
+        selectedDate: getTodayDate(),
+        store: '',
+        checklistType: '',
+        checkedItems: {},
+        submitted: false,
+        submitTime: ''
+      };
+      render();
+    }
+
+    // 初始化
+    render();
+  </script>
+</body>
+</html>
