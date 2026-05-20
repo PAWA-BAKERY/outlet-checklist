@@ -1395,16 +1395,14 @@ const storeData = {
             </select>
           </div>
 
-          ${state.store ? `
-            <div class="input-group">
-              <label>${t.selectType}</label>
-              <select class="input-field" onchange="changeChecklistType(this.value)">
-                <option value="">${t.selectTypePrompt}</option>
-                <option value="opening" ${state.checklistType === 'opening' ? 'selected' : ''}>${t.opening}</option>
-                <option value="closing" ${state.checklistType === 'closing' ? 'selected' : ''}>${t.closing}</option>
-              </select>
-            </div>
-          ` : ''}
+          <div class="input-group">
+            <label>${t.selectType}</label>
+            <select class="input-field" onchange="changeChecklistType(this.value)" ${!state.store ? 'disabled' : ''}>
+              <option value="">${t.selectTypePrompt}</option>
+              <option value="opening" ${state.checklistType === 'opening' ? 'selected' : ''}>${t.opening}</option>
+              <option value="closing" ${state.checklistType === 'closing' ? 'selected' : ''}>${t.closing}</option>
+            </select>
+          </div>
         </div>
 
         ${state.checklistType ? `
