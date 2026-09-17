@@ -351,926 +351,195 @@
     .reset-button:active {
       transform: translateY(2px);
     }
+
+    .admin-gear-btn {
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.4);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-right: 8px;
+    }
+
+    .loading-screen {
+      padding: 60px 20px;
+      text-align: center;
+      color: #555;
+      font-size: 17px;
+    }
+
+    .admin-error-text {
+      color: #c13b1a;
+      font-weight: 600;
+      margin: 8px 0;
+    }
+
+    .admin-tabs {
+      display: flex;
+      background: white;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .admin-tab-btn {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      background: white;
+      font-size: 15px;
+      font-weight: 600;
+      color: #888;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+
+    .admin-tab-btn.active {
+      color: #d4522c;
+      border-bottom-color: #d4522c;
+    }
+
+    .admin-panel-body {
+      padding-bottom: 40px;
+    }
+
+    .admin-block {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .admin-block h3 {
+      margin-bottom: 12px;
+      color: #333;
+    }
+
+    .admin-block h4 {
+      margin: 12px 0;
+      color: #333;
+    }
+
+    .admin-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .admin-add-row {
+      border-top: 1px dashed #ddd;
+      padding-top: 10px;
+      margin-top: 4px;
+    }
+
+    .admin-item-card {
+      background: #fafafa;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 8px;
+    }
+
+    .admin-item-card .admin-category-inputs {
+      margin-bottom: 8px;
+    }
+
+    .admin-row .input-field {
+      padding: 8px 10px;
+      font-size: 14px;
+      width: auto;
+      min-width: 120px;
+    }
+
+    .admin-store-id {
+      font-size: 12px;
+      color: #999;
+      font-family: monospace;
+      white-space: nowrap;
+      margin-right: auto;
+    }
+
+    .admin-store-card {
+      border: 1px solid #eee;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .admin-store-card-footer {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .admin-btn {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      background: #e0e0e0;
+      color: #333;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .admin-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .admin-btn-save {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .admin-btn-danger {
+      background: #e0574a;
+      color: white;
+    }
+
+    .admin-category-title {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: linear-gradient(135deg, #d4522c 0%, #c13b1a 100%);
+    }
+
+    .admin-category-inputs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .admin-category-toolbar {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .admin-inline-input {
+      flex: 1;
+      min-width: 100px;
+      padding: 8px 10px;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
   <div id="app"></div>
 
   <script>
-const storeData = {
-  "PLAZA_SING": {
-    "opening": [
-      {
-        "category_zh": "1. 设备开机 / Equipment Start Up",
-        "category_en": "1. 设备开机 / Equipment Start Up",
-        "items": [
-          {
-            "zh": "开启设备电源：POS、Terminal、面包柜灯。",
-            "en": "Turn on equipment power: POS, terminal and bread cabinet light."
-          },
-          {
-            "zh": "清点备用金，并录入系统。",
-            "en": "Count the float cash and enter it into the system."
-          },
-          {
-            "zh": "测试 POS 与 Terminal 连接是否正常。",
-            "en": "Test that the POS and terminal connection works properly."
-          },
-          {
-            "zh": "擦干净收款台面和 EPOS 屏幕。",
-            "en": "Wipe the cashier counter and EPOS screen clean."
-          }
-        ]
-      },
-      {
-        "category_zh": "2. 物料准备 / Materials Preparation",
-        "category_en": "2. 物料准备 / Materials Preparation",
-        "items": [
-          {
-            "zh": "准备足够的面包袋和手提袋。",
-            "en": "Prepare enough bread bags and carrier bags."
-          },
-          {
-            "zh": "准备 3 块新的湿一次性抹布。",
-            "en": "Prepare 3 new disposable cloths and moisten them."
-          },
-          {
-            "zh": "将面包上架，并摆放价格标签。",
-            "en": "Put bread on shelves and place price tags."
-          },
-          {
-            "zh": "清点预订单数量，并按订单预留。",
-            "en": "Count pre order quantities and set them aside accordingly."
-          }
-        ]
-      },
-      {
-        "category_zh": "3. 营业准备 / Opening Preparation",
-        "category_en": "3. 营业准备 / Opening Preparation",
-        "items": [
-          {
-            "zh": "按照片要求摆放面包和对应价格标签。",
-            "en": "Place bread and matching price tags as shown in the Drive photos."
-          },
-          {
-            "zh": "10:30am 准时打开所有灯。",
-            "en": "Turn on all lights promptly at 10:30am."
-          },
-          {
-            "zh": "收起 1 米线，摆好广告牌，准备营业。",
-            "en": "Put away the 1 metre line, place advertising boards correctly and get ready for business."
-          }
-        ]
-      }
-    ],
-    "closing": [
-      {
-        "category_zh": "1. 店面清洁 / Store Cleaning",
-        "category_en": "1. 店面清洁 / Store Cleaning",
-        "items": [
-          {
-            "zh": "清洁面包柜：清面包屑、擦台面、更换油纸。",
-            "en": "Clean the bread cabinet: remove crumbs, wipe the counter and replace parchment paper."
-          },
-          {
-            "zh": "用湿抹布和无尘布擦玻璃 2 遍。",
-            "en": "Wipe glass twice using a wet cloth and lint free cloth."
-          },
-          {
-            "zh": "清洁货架物品，并摆放整齐。",
-            "en": "Clean shelf items and arrange them neatly."
-          },
-          {
-            "zh": "按照片要求摆好价格标签。",
-            "en": "Place price tags strictly according to the Drive photos."
-          },
-          {
-            "zh": "先扫地，再用加清洁剂的湿拖把拖地至少 2 遍。",
-            "en": "Sweep the floor, then mop at least twice with detergent water."
-          }
-        ]
-      },
-      {
-        "category_zh": "2. 设备及工具清洁 / Equipment and Tools Cleaning",
-        "category_en": "2. 设备及工具清洁 / Equipment and Tools Cleaning",
-        "items": [
-          {
-            "zh": "擦净面包盘和夹子并晾干；每周五彻底清洗。",
-            "en": "Wipe bread trays and tongs clean and dry them. Wash thoroughly every Friday."
-          },
-          {
-            "zh": "擦净水槽，并倒掉垃圾。",
-            "en": "Wipe the sink clean and dispose of rubbish."
-          }
-        ]
-      },
-      {
-        "category_zh": "3. 次日准备 / Preparation for the Next Day",
-        "category_en": "3. 次日准备 / Preparation for the Next Day",
-        "items": [
-          {
-            "zh": "准备足够的次日包装材料。",
-            "en": "Prepare enough packaging materials for the next day."
-          },
-          {
-            "zh": "按照片要求摆好次日价格标签。",
-            "en": "Place next day price tags correctly according to the Drive photos."
-          },
-          {
-            "zh": "检查并订购缺少物料；周五下单。",
-            "en": "Check and order missing materials. Order on Friday."
-          }
-        ]
-      },
-      {
-        "category_zh": "4. 关账及记录 / End Shift and Records",
-        "category_en": "4. 关账及记录 / End Shift and Records",
-        "items": [
-          {
-            "zh": "将 staffmeal 和 waste 录入系统。",
-            "en": "Enter staffmeal and waste into the system."
-          },
-          {
-            "zh": "清点钱箱，保留备用金，并将备用金金额写在当天销售总结小票上；现金差异需说明原因。",
-            "en": "Count the cash drawer, keep the float cash and write the float amount on the daily sales summary receipt. Explain any cash difference."
-          },
-          {
-            "zh": "检查 POS 是否需要更新；如有新版本，立即更新后再关机。",
-            "en": "Check whether POS needs an update. If a new version is available, update it before shutting down."
-          },
-          {
-            "zh": "EPOS 完成 End Shift，并将当天销售总结小票拍照上传 Pawa Cashier group。",
-            "en": "Complete End Shift in EPOS and upload a photo of the daily sales summary receipt to Pawa Cashier group."
-          },
-          {
-            "zh": "将多余现金存入公司账户，并上传存款小票照片至 Pawa Cashier group。",
-            "en": "Deposit extra cash into the company account and upload the deposit receipt photo to Pawa Cashier group."
-          },
-          {
-            "zh": "将重要物品锁在抽屉里，并藏好抽屉钥匙。",
-            "en": "Lock important items in the drawer and hide the drawer key properly."
-          },
-          {
-            "zh": "关闭空调、风扇、灯、音响、电子屏和 POS 电源；保留 Wi Fi 和招牌灯电源，按照片执行。",
-            "en": "Turn off air conditioner, fan, lights, speaker, digital screen and POS. Keep Wi Fi and sign lights on, following the Drive photos."
-          }
-        ]
-      },
-      {
-        "category_zh": "5. 收店收尾 / Closing Wrap Up",
-        "category_en": "5. 收店收尾 / Closing Wrap Up",
-        "items": [
-          {
-            "zh": "收好广告牌。",
-            "en": "Put away the advertising boards."
-          },
-          {
-            "zh": "将一米线围栏整齐拉到正确位置。",
-            "en": "Pull the rope barrier neatly to the correct position."
-          },
-          {
-            "zh": "拍照上传：面包柜含价格标签、地面、台面、店面整体。",
-            "en": "Upload photos of the bread cabinet with price tags, floor, counter and overall store to Pawa Cashier group."
-          }
-        ]
-      }
-    ]
-  },
-  "PLQ_MALL": {
-    "opening": [
-      {
-        "category_zh": "1. 设备开机 / Equipment Start Up",
-        "category_en": "1. 设备开机 / Equipment Start Up",
-        "items": [
-          {
-            "zh": "开启设备电源：POS、Terminal、面包柜灯。",
-            "en": "Turn on equipment power: POS, terminal and bread cabinet light."
-          },
-          {
-            "zh": "清点备用金，并录入系统。",
-            "en": "Count the float cash and enter it into the system."
-          },
-          {
-            "zh": "测试 POS 与 Terminal 连接是否正常。",
-            "en": "Test that the POS and terminal connection works properly."
-          },
-          {
-            "zh": "擦干净收款台面和 EPOS 屏幕。",
-            "en": "Wipe the cashier counter and EPOS screen clean."
-          }
-        ]
-      },
-      {
-        "category_zh": "2. 物料准备 / Materials Preparation",
-        "category_en": "2. 物料准备 / Materials Preparation",
-        "items": [
-          {
-            "zh": "准备足够的面包袋和手提袋。",
-            "en": "Prepare enough bread bags and carrier bags."
-          },
-          {
-            "zh": "准备 3 块新的湿一次性抹布。",
-            "en": "Prepare 3 new disposable cloths and moisten them."
-          },
-          {
-            "zh": "将面包上架，并摆放价格标签。",
-            "en": "Put bread on shelves and place price tags."
-          },
-          {
-            "zh": "清点预订单数量，并按订单预留。",
-            "en": "Count pre order quantities and set them aside accordingly."
-          }
-        ]
-      },
-      {
-        "category_zh": "3. 营业准备 / Opening Preparation",
-        "category_en": "3. 营业准备 / Opening Preparation",
-        "items": [
-          {
-            "zh": "按照片要求摆放面包和对应价格标签。",
-            "en": "Place bread and matching price tags as shown in the Drive photos."
-          },
-          {
-            "zh": "9:30am 准时打开所有灯。",
-            "en": "Turn on all lights promptly at 9:30am."
-          },
-          {
-            "zh": "收起 1 米线，摆好广告牌，准备营业。",
-            "en": "Put away the 1 metre line, place advertising boards correctly and get ready for business."
-          }
-        ]
-      }
-    ],
-    "closing": [
-      {
-        "category_zh": "1. 店面清洁 / Store Cleaning",
-        "category_en": "1. 店面清洁 / Store Cleaning",
-        "items": [
-          {
-            "zh": "清洁面包柜：清面包屑、擦台面、更换油纸。",
-            "en": "Clean the bread cabinet: remove crumbs, wipe the counter and replace parchment paper."
-          },
-          {
-            "zh": "用湿抹布和无尘布擦玻璃 2 遍。",
-            "en": "Wipe glass twice using a wet cloth and lint free cloth."
-          },
-          {
-            "zh": "清洁货架物品，并摆放整齐。",
-            "en": "Clean shelf items and arrange them neatly."
-          },
-          {
-            "zh": "按照片要求摆好价格标签。",
-            "en": "Place price tags strictly according to the Drive photos."
-          },
-          {
-            "zh": "先扫地，再用加清洁剂的湿拖把拖地至少 2 遍。",
-            "en": "Sweep the floor, then mop at least twice with detergent water."
-          }
-        ]
-      },
-      {
-        "category_zh": "2. 设备及工具清洁 / Equipment and Tools Cleaning",
-        "category_en": "2. 设备及工具清洁 / Equipment and Tools Cleaning",
-        "items": [
-          {
-            "zh": "擦净面包盘和夹子并晾干；每周五彻底清洗。",
-            "en": "Wipe bread trays and tongs clean and dry them. Wash thoroughly every Friday."
-          },
-          {
-            "zh": "擦净水槽，并倒掉垃圾。",
-            "en": "Wipe the sink clean and dispose of rubbish."
-          }
-        ]
-      },
-      {
-        "category_zh": "3. 次日准备 / Preparation for the Next Day",
-        "category_en": "3. 次日准备 / Preparation for the Next Day",
-        "items": [
-          {
-            "zh": "准备足够的次日包装材料。",
-            "en": "Prepare enough packaging materials for the next day."
-          },
-          {
-            "zh": "按照片要求摆好次日价格标签。",
-            "en": "Place next day price tags correctly according to the Drive photos."
-          },
-          {
-            "zh": "检查并订购缺少物料；周五下单。",
-            "en": "Check and order missing materials. Order on Friday."
-          }
-        ]
-      },
-      {
-        "category_zh": "4. 关账及记录 / End Shift and Records",
-        "category_en": "4. 关账及记录 / End Shift and Records",
-        "items": [
-          {
-            "zh": "将 staffmeal 和 waste 录入系统。",
-            "en": "Enter staffmeal and waste into the system."
-          },
-          {
-            "zh": "清点钱箱，保留备用金，并将备用金金额写在当天销售总结小票上；现金差异需说明原因。",
-            "en": "Count the cash drawer, keep the float cash and write the float amount on the daily sales summary receipt. Explain any cash difference."
-          },
-          {
-            "zh": "检查 POS 是否需要更新；如有新版本，立即更新后再关机。",
-            "en": "Check whether POS needs an update. If a new version is available, update it before shutting down."
-          },
-          {
-            "zh": "EPOS 完成 End Shift，并将当天销售总结小票拍照上传 Pawa Cashier group。",
-            "en": "Complete End Shift in EPOS and upload a photo of the daily sales summary receipt to Pawa Cashier group."
-          },
-          {
-            "zh": "将多余现金存入公司账户，并上传存款小票照片至 Pawa Cashier group。",
-            "en": "Deposit extra cash into the company account and upload the deposit receipt photo to Pawa Cashier group."
-          },
-          {
-            "zh": "将重要物品锁在抽屉里，并藏好抽屉钥匙。",
-            "en": "Lock important items in the drawer and hide the drawer key properly."
-          },
-          {
-            "zh": "关闭空调、风扇、灯、音响、电子屏和 POS 电源；保留 Wi Fi 和招牌灯电源，按照片执行。",
-            "en": "Turn off air conditioner, fan, lights, speaker, digital screen and POS. Keep Wi Fi and sign lights on, following the Drive photos."
-          }
-        ]
-      },
-      {
-        "category_zh": "5. 收店收尾 / Closing Wrap Up",
-        "category_en": "5. 收店收尾 / Closing Wrap Up",
-        "items": [
-          {
-            "zh": "收好广告牌。",
-            "en": "Put away the advertising boards."
-          },
-          {
-            "zh": "将绳带围栏整齐拉到正确位置。",
-            "en": "Pull the rope barrier neatly to the correct position."
-          },
-          {
-            "zh": "拍照上传：面包柜含价格标签、地面、台面、店面整体。",
-            "en": "Upload photos of the bread cabinet with price tags, floor, counter and overall store to Pawa Cashier group."
-          }
-        ]
-      }
-    ]
-  },
-  "PLUS": {
-    "opening": [
-      {
-        "category_zh": "1. 设备开机 / Equipment Start Up",
-        "category_en": "1. 设备开机 / Equipment Start Up",
-        "items": [
-          {
-            "zh": "开启设备电源：POS、刷卡机、小冰箱、音响、面包柜灯和风扇。",
-            "en": "Turn on equipment power: POS, card machine, small refrigerator, speaker, bread cabinet lights and fans."
-          },
-          {
-            "zh": "清点备用金，并录入系统。",
-            "en": "Count the float cash and enter it into the system."
-          },
-          {
-            "zh": "测试 POS 与 Terminal 连接是否正常。",
-            "en": "Test that the POS and terminal connection works properly."
-          },
-          {
-            "zh": "连接音响，并用 iPad 播放英文歌曲。",
-            "en": "Connect the speaker and play English songs on the iPad."
-          }
-        ]
-      },
-      {
-        "category_zh": "2. 物料准备 / Materials Preparation",
-        "category_en": "2. 物料准备 / Materials Preparation",
-        "items": [
-          {
-            "zh": "准备足够的面包袋和手提袋。",
-            "en": "Prepare enough bread bags and carrier bags."
-          },
-          {
-            "zh": "准备 4 块新的湿一次性抹布。",
-            "en": "Prepare 4 new disposable cloths and moisten them."
-          },
-          {
-            "zh": "清点预订单数量，并按订单预留。",
-            "en": "Count pre order quantities and set them aside accordingly."
-          }
-        ]
-      },
-      {
-        "category_zh": "3. 店面整理 / Store Tidying",
-        "category_en": "3. 店面整理 / Store Tidying",
-        "items": [
-          {
-            "zh": "擦干净收款台面和 EPOS 屏幕。",
-            "en": "Wipe the cashier counter and EPOS screen clean."
-          },
-          {
-            "zh": "将广告牌摆放到正确位置。",
-            "en": "Place advertising boards in the correct position."
-          },
-          {
-            "zh": "整理饼干并擦拭干净。",
-            "en": "Arrange the cookies neatly and wipe them clean."
-          }
-        ]
-      },
-      {
-        "category_zh": "4. 营业准备 / Opening Preparation",
-        "category_en": "4. 营业准备 / Opening Preparation",
-        "items": [
-          {
-            "zh": "按照片要求将面包放到正确货架位置，并摆好对应价格标签。",
-            "en": "Place bread and matching price tags correctly according to the Drive photos."
-          },
-          {
-            "zh": "8:00am 准时打开所有灯。",
-            "en": "Turn on all lights promptly at 8:00am."
-          },
-          {
-            "zh": "开门，并将门状态设为 OPEN。",
-            "en": "Open the door and set the door status to OPEN."
-          }
-        ]
-      }
-    ],
-    "closing": [
-      {
-        "category_zh": "1. 店面清洁 / Store Cleaning",
-        "category_en": "1. 店面清洁 / Store Cleaning",
-        "items": [
-          {
-            "zh": "清洁面包柜：清面包屑、擦台面、更换油纸。",
-            "en": "Clean the bread cabinet: remove crumbs, wipe the counter and replace parchment paper."
-          },
-          {
-            "zh": "用无油湿抹布和无尘布擦面包柜玻璃 2 遍。",
-            "en": "Wipe bread cabinet glass twice using an oil free wet cloth and lint free cloth."
-          },
-          {
-            "zh": "清洁货架物品，并摆放整齐。",
-            "en": "Clean shelf items and arrange them neatly."
-          },
-          {
-            "zh": "按照片要求摆好价格标签。",
-            "en": "Place price tags strictly according to the Drive photos."
-          },
-          {
-            "zh": "先扫地，再用加清洁剂的湿拖把拖地至少 2 遍。",
-            "en": "Sweep the floor, then mop at least twice with detergent water."
-          }
-        ]
-      },
-      {
-        "category_zh": "2. 设备及工具清洁 / Equipment and Tools Cleaning",
-        "category_en": "2. 设备及工具清洁 / Equipment and Tools Cleaning",
-        "items": [
-          {
-            "zh": "清洗所有铁面包盘并晾干。",
-            "en": "Wash all iron bread trays and dry them."
-          },
-          {
-            "zh": "擦净面包盘和夹子；每周五彻底清洗所有盘子和夹子。",
-            "en": "Wipe bread trays and tongs clean. Wash all trays and tongs thoroughly every Friday."
-          },
-          {
-            "zh": "清洁切片机，并擦干。",
-            "en": "Clean the slicer and wipe it dry."
-          },
-          {
-            "zh": "擦净水槽，并倒掉垃圾。",
-            "en": "Wipe the sink clean and dispose of rubbish."
-          }
-        ]
-      },
-      {
-        "category_zh": "3. 次日准备 / Preparation for the Next Day",
-        "category_en": "3. 次日准备 / Preparation for the Next Day",
-        "items": [
-          {
-            "zh": "准备足够的次日包装材料。",
-            "en": "Prepare enough packaging materials for the next day."
-          },
-          {
-            "zh": "检查并订购缺少物料；周五下单。",
-            "en": "Check and order missing materials. Order on Friday."
-          }
-        ]
-      },
-      {
-        "category_zh": "4. 关账及记录 / End Shift and Records",
-        "category_en": "4. 关账及记录 / End Shift and Records",
-        "items": [
-          {
-            "zh": "确认所有 staffmeal 和 waste 已录入系统。",
-            "en": "Make sure all staffmeal and waste are entered into the system."
-          },
-          {
-            "zh": "清点钱箱，保留备用金，并将备用金金额写在当天销售总结小票上；现金差异需说明原因。",
-            "en": "Count the cash drawer, keep the float cash and write the float amount on the daily sales summary receipt. Explain any cash difference."
-          },
-          {
-            "zh": "检查 POS 是否需要更新；如有新版本，立即更新后再关机。",
-            "en": "Check whether POS needs an update. If a new version is available, update it before shutting down."
-          },
-          {
-            "zh": "EPOS 完成 End Shift，并将当天销售总结小票拍照上传 Pawa Cashier group。",
-            "en": "Complete End Shift in EPOS and upload a photo of the daily sales summary receipt to Pawa Cashier group."
-          },
-          {
-            "zh": "将多余现金存入公司账户，并上传存款小票照片至 Pawa Cashier group。",
-            "en": "Deposit extra cash into the company account and upload the deposit receipt photo to Pawa Cashier group."
-          }
-        ]
-      },
-      {
-        "category_zh": "5. 收店收尾 / Closing Wrap Up",
-        "category_en": "5. 收店收尾 / Closing Wrap Up",
-        "items": [
-          {
-            "zh": "关闭空调、风扇、灯、音响、电子屏和 POS 电源；保留 Wi Fi 电源，按照片执行。",
-            "en": "Turn off air conditioner, fan, lights, speaker, digital screen and POS. Keep Wi Fi on, following the Drive photos."
-          },
-          {
-            "zh": "收好广告牌；每周五收到店内。",
-            "en": "Put away advertising boards. Bring them into the shop on Friday."
-          },
-          {
-            "zh": "拍照上传：面包柜含价格标签、地面、台面、店面整体。",
-            "en": "Upload photos of the bread cabinet with price tags, floor, counter and overall store to Pawa Cashier group."
-          },
-          {
-            "zh": "关门，将门状态设为 LOCK，并把钥匙放入门口木盒。",
-            "en": "Close the door, set the door status to LOCK and put the key in the wooden box at the door gate."
-          }
-        ]
-      }
-    ]
-  },
-  "STAR_VISTA": {
-    "opening": [
-      {
-        "category_zh": "1. 设备开机 / Equipment Start Up",
-        "category_en": "1. 设备开机 / Equipment Start Up",
-        "items": [
-          {
-            "zh": "开启设备电源：POS、刷卡机、咖啡机、面包柜和灯光。",
-            "en": "Turn on equipment power: POS, card machine, coffee machine, bread cabinet and lights."
-          },
-          {
-            "zh": "清点备用金，并录入系统。",
-            "en": "Count the float cash and enter it into the system."
-          },
-          {
-            "zh": "测试 POS 与 Terminal 连接是否正常。",
-            "en": "Test that the POS and terminal connection works properly."
-          },
-          {
-            "zh": "擦干净收款台面和 EPOS 屏幕。",
-            "en": "Wipe the cashier counter and EPOS screen clean."
-          },
-          {
-            "zh": "打开音响，连接手机蓝牙，播放英文音乐。",
-            "en": "Turn on the speaker, connect phone Bluetooth and play English music."
-          }
-        ]
-      },
-      {
-        "category_zh": "2. 物料准备 / Materials Preparation",
-        "category_en": "2. 物料准备 / Materials Preparation",
-        "items": [
-          {
-            "zh": "确认面包袋、大号和小号手提袋充足。",
-            "en": "Make sure bread bags and large and small carrier bags are sufficient."
-          },
-          {
-            "zh": "确认磨豆机咖啡豆、咖啡杯和杯盖等物料充足。",
-            "en": "Make sure coffee beans in the grinder, coffee cups, lids and related materials are sufficient."
-          },
-          {
-            "zh": "确认茶包、果酱、冷柜牛奶和直饮冰水充足。",
-            "en": "Make sure tea bags, jam, chilled milk and drinking ice water are sufficient."
-          }
-        ]
-      },
-      {
-        "category_zh": "3. 营业准备 / Opening Preparation",
-        "category_en": "3. 营业准备 / Opening Preparation",
-        "items": [
-          {
-            "zh": "摆整齐桌椅，并确认桌面和椅面干净。",
-            "en": "Arrange tables and chairs neatly, and make sure table tops and chair surfaces are clean."
-          },
-          {
-            "zh": "收起 1 米线，摆好广告牌，并压住广告牌支架底部防风。",
-            "en": "Put away the 1 metre line, place advertising boards correctly and weigh down the stand base to prevent wind."
-          },
-          {
-            "zh": "面包上架并放到正确位置，确认价格牌无缺失。",
-            "en": "Put bread on shelves in the correct positions and make sure no price tags are missing."
-          },
-          {
-            "zh": "打开 Grab Terminal，设置可售卖的面包和数量。",
-            "en": "Turn on Grab Terminal and set the available bread items and quantities."
-          }
-        ]
-      }
-    ],
-    "closing": [
-      {
-        "category_zh": "1. 店面清洁 / Store Cleaning",
-        "category_en": "1. 店面清洁 / Store Cleaning",
-        "items": [
-          {
-            "zh": "清洁面包柜：清面包屑、擦台面、更换油纸。",
-            "en": "Clean the bread cabinet: remove crumbs, wipe the counter and replace parchment paper."
-          },
-          {
-            "zh": "用无油湿抹布和无尘布擦面包柜玻璃 2 遍。",
-            "en": "Wipe bread cabinet glass twice using an oil free wet cloth and lint free cloth."
-          },
-          {
-            "zh": "按位置要求摆好价格标签。",
-            "en": "Place price tags strictly in the required positions."
-          },
-          {
-            "zh": "倒掉蛋糕柜积水盒，并关闭电源。",
-            "en": "Empty the cake cabinet water tray and turn off the power."
-          },
-          {
-            "zh": "将椅子倒放在桌面上；先扫地，再用加清洁剂的湿拖把拖干净。",
-            "en": "Place chairs upside down on tables. Sweep the floor, then mop with detergent water."
-          }
-        ]
-      },
-      {
-        "category_zh": "2. 设备及工具清洁 / Equipment and Tools Cleaning",
-        "category_en": "2. 设备及工具清洁 / Equipment and Tools Cleaning",
-        "items": [
-          {
-            "zh": "按流程清洁咖啡机。",
-            "en": "Clean the coffee machine according to the procedure."
-          },
-          {
-            "zh": "擦净水槽，并倒掉垃圾。",
-            "en": "Wipe the sink clean and dispose of rubbish."
-          },
-          {
-            "zh": "擦净面包盘和夹子；每周五用洗洁精全部清洗并晾干。",
-            "en": "Wipe bread trays and tongs clean. Every Friday, wash all trays and tongs with detergent and dry them."
-          }
-        ]
-      },
-      {
-        "category_zh": "3. 关账及记录 / End Shift and Records",
-        "category_en": "3. 关账及记录 / End Shift and Records",
-        "items": [
-          {
-            "zh": "确认所有 staffmeal 和 waste 已录入系统。",
-            "en": "Make sure all staffmeal and waste are entered into the system."
-          },
-          {
-            "zh": "清点钱箱，保留备用金，并将备用金金额写在当天销售总结小票上；现金差异需说明原因。",
-            "en": "Count the cash drawer, keep the float cash and write the float amount on the daily sales summary receipt. Explain any cash difference."
-          },
-          {
-            "zh": "将多余现金包好并锁进抽屉，记录当天现金金额到现金记录表，并截图上传 Pawa Cashier group。",
-            "en": "Wrap extra cash and lock it in the drawer. Record the daily cash amount in the cash record sheet and upload a screenshot to Pawa Cashier group."
-          },
-          {
-            "zh": "EPOS 完成 End Shift，并将当天销售总结小票拍照上传 Pawa Cashier group。",
-            "en": "Complete End Shift in EPOS and upload a photo of the daily sales summary receipt to Pawa Cashier group."
-          },
-          {
-            "zh": "拍照上传 Grab Terminal 当天销售金额至 Pawa Cashier group。",
-            "en": "Take a photo of the Grab Terminal daily sales amount and upload it to Pawa Cashier group."
-          },
-          {
-            "zh": "将客服手机和重要物品锁在抽屉里，并藏好抽屉钥匙。",
-            "en": "Lock the customer service phone and important items in the drawer, and hide the drawer key properly."
-          },
-          {
-            "zh": "关闭空调、风扇、灯、音响、电子屏和 POS 电源；保留 Wi Fi 和招牌灯电源，按照片执行。",
-            "en": "Turn off air conditioner, fan, lights, speaker, digital screen and POS. Keep Wi Fi and sign lights on, following the Drive photos."
-          }
-        ]
-      },
-      {
-        "category_zh": "4. 次日准备 / Preparation for the Next Day",
-        "category_en": "4. 次日准备 / Preparation for the Next Day",
-        "items": [
-          {
-            "zh": "准备足够的次日包装材料。",
-            "en": "Prepare enough packaging materials for the next day."
-          },
-          {
-            "zh": "检查并订购缺少物料；周一、周三、周五下单。",
-            "en": "Check and order missing materials on Monday, Wednesday and Friday."
-          },
-          {
-            "zh": "给音响设备充电。",
-            "en": "Charge the audio equipment."
-          }
-        ]
-      },
-      {
-        "category_zh": "5. 收店收尾 / Closing Wrap Up",
-        "category_en": "5. 收店收尾 / Closing Wrap Up",
-        "items": [
-          {
-            "zh": "收好广告牌，放在餐盘回收处桌面上并压好，防止夜间被风吹走。",
-            "en": "Put away advertising boards on the tray return table and weigh them down to prevent wind at night."
-          },
-          {
-            "zh": "用桌子和 1 米线围好门店，防止陌生人进入。",
-            "en": "Use tables and the 1 metre line to block the store and prevent strangers from entering."
-          },
-          {
-            "zh": "拍照上传：面包柜含价格标签、咖啡机、桌椅、地面、台面、店面整体。",
-            "en": "Upload photos of the bread cabinet with price tags, coffee machine, tables and chairs, floor, counter and overall store to Pawa Cashier group."
-          }
-        ]
-      }
-    ]
-  },
-  "SUNTEC_CITY": {
-    "opening": [
-      {
-        "category_zh": "1. 设备开机 / Equipment Start Up",
-        "category_en": "1. 设备开机 / Equipment Start Up",
-        "items": [
-          {
-            "zh": "开启设备电源：POS、刷卡机、咖啡机、面包柜和灯光。",
-            "en": "Turn on equipment power: POS, card machine, coffee machine, bread cabinet and lights."
-          },
-          {
-            "zh": "清点备用金，并录入系统。",
-            "en": "Count the float cash and enter it into the system."
-          },
-          {
-            "zh": "测试 POS 与 Terminal 连接是否正常。",
-            "en": "Test that the POS and terminal connection works properly."
-          },
-          {
-            "zh": "擦干净收款台面和 EPOS 屏幕。",
-            "en": "Wipe the cashier counter and EPOS screen clean."
-          }
-        ]
-      },
-      {
-        "category_zh": "2. 物料准备 / Materials Preparation",
-        "category_en": "2. 物料准备 / Materials Preparation",
-        "items": [
-          {
-            "zh": "确认面包袋、大号和小号手提袋充足。",
-            "en": "Make sure bread bags and large and small carrier bags are sufficient."
-          },
-          {
-            "zh": "确认磨豆机咖啡豆、咖啡杯和杯盖等物料充足。",
-            "en": "Make sure coffee beans in the grinder, coffee cups, lids and related materials are sufficient."
-          },
-          {
-            "zh": "确认茶包、果酱、小冰箱牛奶和直饮冰水充足。",
-            "en": "Make sure tea bags, jam, small refrigerator milk and drinking ice water are sufficient."
-          },
-          {
-            "zh": "准备 4 块一次性湿抹布。",
-            "en": "Prepare 4 disposable wet cloths."
-          }
-        ]
-      },
-      {
-        "category_zh": "3. 营业准备 / Opening Preparation",
-        "category_en": "3. 营业准备 / Opening Preparation",
-        "items": [
-          {
-            "zh": "收起 1 米线，并将广告牌摆放到正确位置。",
-            "en": "Put away the 1 metre line and place advertising boards correctly."
-          },
-          {
-            "zh": "面包上架并放到正确位置，确认价格牌无缺失。",
-            "en": "Put bread on shelves in the correct positions and make sure no price tags are missing."
-          }
-        ]
-      }
-    ],
-    "closing": [
-      {
-        "category_zh": "1. 店面清洁 / Store Cleaning",
-        "category_en": "1. 店面清洁 / Store Cleaning",
-        "items": [
-          {
-            "zh": "清洁面包柜：清面包屑、擦台面、更换油纸。",
-            "en": "Clean the bread cabinet: remove crumbs, wipe the counter and replace parchment paper."
-          },
-          {
-            "zh": "用无油湿抹布和无尘布擦面包柜玻璃 2 遍。",
-            "en": "Wipe bread cabinet glass twice using an oil free wet cloth and lint free cloth."
-          },
-          {
-            "zh": "清洁货架物品，并摆放整齐。",
-            "en": "Clean shelf items and arrange them neatly."
-          },
-          {
-            "zh": "按照片要求摆好价格标签。",
-            "en": "Place price tags strictly according to the Drive photos."
-          },
-          {
-            "zh": "先扫地，再用加清洁剂的湿拖把拖地至少 2 遍。",
-            "en": "Sweep the floor, then mop at least twice with detergent water."
-          }
-        ]
-      },
-      {
-        "category_zh": "2. 设备及工具清洁 / Equipment and Tools Cleaning",
-        "category_en": "2. 设备及工具清洁 / Equipment and Tools Cleaning",
-        "items": [
-          {
-            "zh": "按流程清洁咖啡机。",
-            "en": "Clean the coffee machine according to the procedure."
-          },
-          {
-            "zh": "擦净水槽，并倒掉垃圾。",
-            "en": "Wipe the sink clean and dispose of rubbish."
-          },
-          {
-            "zh": "擦净面包盘和夹子；每周五用洗洁精全部清洗并晾干。",
-            "en": "Wipe bread trays and tongs clean. Every Friday, wash all trays and tongs with detergent and dry them."
-          }
-        ]
-      },
-      {
-        "category_zh": "3. 次日准备 / Preparation for the Next Day",
-        "category_en": "3. 次日准备 / Preparation for the Next Day",
-        "items": [
-          {
-            "zh": "准备足够的次日包装材料。",
-            "en": "Prepare enough packaging materials for the next day."
-          },
-          {
-            "zh": "检查并订购缺少物料；周一、周三、周五下单。",
-            "en": "Check and order missing materials on Monday, Wednesday and Friday."
-          },
-          {
-            "zh": "给音响设备充电。",
-            "en": "Charge the audio equipment."
-          }
-        ]
-      },
-      {
-        "category_zh": "4. 关账及记录 / End Shift and Records",
-        "category_en": "4. 关账及记录 / End Shift and Records",
-        "items": [
-          {
-            "zh": "确认所有 staffmeal 和 waste 已录入系统。",
-            "en": "Make sure all staffmeal and waste are entered into the system."
-          },
-          {
-            "zh": "清点钱箱，保留备用金，并将备用金金额写在当天销售总结小票上；现金差异需说明原因。",
-            "en": "Count the cash drawer, keep the float cash and write the float amount on the daily sales summary receipt. Explain any cash difference."
-          },
-          {
-            "zh": "检查 POS 是否需要更新；如有新版本，立即更新后再关机。",
-            "en": "Check whether POS needs an update. If a new version is available, update it before shutting down."
-          },
-          {
-            "zh": "EPOS 完成 End Shift，并将当天销售总结小票拍照上传 Pawa Cashier group。",
-            "en": "Complete End Shift in EPOS and upload a photo of the daily sales summary receipt to Pawa Cashier group."
-          },
-          {
-            "zh": "将多余现金存入公司账户，并上传存款小票照片至 Pawa Cashier group。",
-            "en": "Deposit extra cash into the company account and upload the deposit receipt photo to Pawa Cashier group."
-          },
-          {
-            "zh": "将重要物品锁在抽屉里，并藏好抽屉钥匙。",
-            "en": "Lock important items in the drawer and hide the drawer key properly."
-          },
-          {
-            "zh": "关闭空调、风扇、灯、音响、电子屏和 POS 电源；保留 Wi Fi 和招牌灯电源，按照片执行。",
-            "en": "Turn off air conditioner, fan, lights, speaker, digital screen and POS. Keep Wi Fi and sign lights on, following the Drive photos."
-          }
-        ]
-      },
-      {
-        "category_zh": "5. 收店收尾 / Closing Wrap Up",
-        "category_en": "5. 收店收尾 / Closing Wrap Up",
-        "items": [
-          {
-            "zh": "收好广告牌和 1 米线，并放到正确位置。",
-            "en": "Put away advertising boards and the 1 metre line, and place them correctly."
-          },
-          {
-            "zh": "用面包架子车挡住进出口，防止陌生人进入。",
-            "en": "Use the bread rack trolley to block the entrance and exit to prevent strangers from entering."
-          },
-          {
-            "zh": "拍照上传：面包柜含价格标签、咖啡机、桌椅、地面、台面、店面整体。",
-            "en": "Upload photos of the bread cabinet with price tags, coffee machine, tables and chairs, floor, counter and overall store to Pawa Cashier group."
-          }
-        ]
-      }
-    ]
-  }
-};
+let storeData = {};
+    let storeOrder = [];
+    let dataLoaded = false;
+    let dataLoadError = false;
     // 翻译
     const translations = {
       zh: {
@@ -1289,7 +558,47 @@ const storeData = {
         submissionSuccess: '提交成功！',
         pleaseScreenshot: '请截图保存此记录',
         completedAt: '完成时间',
-        reset: '重新开始'
+        reset: '重新开始',
+        loading: '正在加载检查表数据…',
+        loadError: '加载失败，请检查网络后重试',
+        retry: '重试',
+        adminEntry: '管理',
+        adminLoginTitle: '管理员登录',
+        adminPasswordPlaceholder: '请输入管理密码',
+        adminLogin: '登录',
+        adminCancel: '取消',
+        adminWrongPassword: '密码错误',
+        adminPanelTitle: '后台管理',
+        backToChecklist: '返回检查表',
+        storesTab: '门店管理',
+        itemsTab: '检查项目管理',
+        addStore: '添加门店',
+        storeIdLabel: '门店代码（如 CITY_HALL，仅限英文字母/数字/下划线）',
+        storeNameLabel: '门店名称（显示名称）',
+        addStoreBtn: '添加',
+        deleteStoreBtn: '删除门店',
+        deleteStoreConfirm: '确定要删除该门店吗？该门店下所有检查项目都会被删除，此操作不可撤销。',
+        renameStoreBtn: '保存',
+        selectStorePrompt: '请选择要管理的门店',
+        selectTypeForItems: '选择流程',
+        addCategory: '添加分类',
+        categoryZhLabel: '分类名称（中文）',
+        categoryEnLabel: '分类名称（英文）',
+        addCategoryBtn: '添加分类',
+        deleteCategoryConfirm: '确定要删除该分类吗？分类下所有检查项目都会被删除。',
+        addItem: '添加检查项',
+        itemZhLabel: '检查项内容（中文）',
+        itemEnLabel: '检查项内容（英文）',
+        addItemBtn: '添加检查项',
+        save: '保存',
+        cancel: '取消',
+        edit: '编辑',
+        delete: '删除',
+        moveUp: '上移',
+        moveDown: '下移',
+        savingText: '保存中…',
+        saveFailed: '保存失败，请重试',
+        deleteItemConfirm: '确定要删除该检查项吗？'
       },
       en: {
         title: 'PAWA BAKERY',
@@ -1307,7 +616,47 @@ const storeData = {
         submissionSuccess: 'Success!',
         pleaseScreenshot: 'Please screenshot this record',
         completedAt: 'Completed At',
-        reset: 'Start Over'
+        reset: 'Start Over',
+        loading: 'Loading checklist data…',
+        loadError: 'Failed to load. Please check your connection and try again.',
+        retry: 'Retry',
+        adminEntry: 'Admin',
+        adminLoginTitle: 'Admin Login',
+        adminPasswordPlaceholder: 'Enter admin password',
+        adminLogin: 'Login',
+        adminCancel: 'Cancel',
+        adminWrongPassword: 'Incorrect password',
+        adminPanelTitle: 'Admin Panel',
+        backToChecklist: 'Back to Checklist',
+        storesTab: 'Manage Stores',
+        itemsTab: 'Manage Checklist Items',
+        addStore: 'Add Store',
+        storeIdLabel: 'Store code (e.g. CITY_HALL, letters/numbers/underscore only)',
+        storeNameLabel: 'Store display name',
+        addStoreBtn: 'Add',
+        deleteStoreBtn: 'Delete Store',
+        deleteStoreConfirm: 'Delete this store? All its checklist items will be deleted too. This cannot be undone.',
+        renameStoreBtn: 'Save',
+        selectStorePrompt: 'Select a store to manage',
+        selectTypeForItems: 'Select checklist type',
+        addCategory: 'Add Category',
+        categoryZhLabel: 'Category name (Chinese)',
+        categoryEnLabel: 'Category name (English)',
+        addCategoryBtn: 'Add Category',
+        deleteCategoryConfirm: 'Delete this category? All items in it will be deleted too.',
+        addItem: 'Add Item',
+        itemZhLabel: 'Item text (Chinese)',
+        itemEnLabel: 'Item text (English)',
+        addItemBtn: 'Add Item',
+        save: 'Save',
+        cancel: 'Cancel',
+        edit: 'Edit',
+        delete: 'Delete',
+        moveUp: 'Move Up',
+        moveDown: 'Move Down',
+        savingText: 'Saving…',
+        saveFailed: 'Save failed, please try again',
+        deleteItemConfirm: 'Delete this checklist item?'
       }
     };
 
@@ -1320,7 +669,17 @@ const storeData = {
       checklistType: '',
       checkedItems: {},
       submitted: false,
-      submitTime: ''
+      submitTime: '',
+      view: 'checklist', // 'checklist' | 'adminLogin' | 'admin'
+      adminPassword: '',
+      adminLoginError: false,
+      adminBusy: false,
+      adminData: null, // { stores, categories, items } from /api/admin/full
+      adminTab: 'stores', // 'stores' | 'items'
+      adminSelectedStore: '',
+      adminSelectedType: 'opening',
+      newStoreId: '',
+      newStoreName: ''
     };
 
     function getTodayDate() {
@@ -1328,7 +687,57 @@ const storeData = {
       return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
     }
 
+    // ---- API helpers ----
+    async function loadChecklistData() {
+      dataLoaded = false;
+      dataLoadError = false;
+      render();
+      try {
+        const res = await fetch('/api/checklist');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        storeData = data.stores || {};
+        storeOrder = data.storeOrder || Object.keys(storeData);
+        dataLoaded = true;
+      } catch (e) {
+        console.error('加载检查表数据失败', e);
+        dataLoadError = true;
+      }
+      render();
+    }
+
+    async function adminApiCall(path, options = {}) {
+      const headers = Object.assign({ 'Content-Type': 'application/json' }, options.headers || {});
+      if (state.adminPassword) headers['X-Admin-Password'] = state.adminPassword;
+      const res = await fetch(path, Object.assign({}, options, { headers }));
+      let body = null;
+      try { body = await res.json(); } catch (e) {}
+      if (!res.ok) {
+        const err = new Error((body && body.error) || ('HTTP ' + res.status));
+        err.status = res.status;
+        throw err;
+      }
+      return body;
+    }
+
+    async function loadAdminData() {
+      state.adminData = await adminApiCall('/api/admin/full');
+      render();
+    }
+
     function render() {
+      if (state.view === 'adminLogin') {
+        renderAdminLogin();
+        return;
+      }
+      if (state.view === 'admin') {
+        renderAdminPanel();
+        return;
+      }
+      if (!dataLoaded) {
+        renderLoadingScreen();
+        return;
+      }
       if (state.submitted) {
         renderSuccessScreen();
         return;
@@ -1353,6 +762,7 @@ const storeData = {
             <h1>${t.title}</h1>
             <p>${t.subtitle}</p>
           </div>
+          <button class="admin-gear-btn" onclick="openAdminLogin()" title="${t.adminEntry}">⚙</button>
           <select class="language-select" onchange="changeLanguage(this.value)">
             <option value="zh" ${state.language === 'zh' ? 'selected' : ''}>中文</option>
             <option value="en" ${state.language === 'en' ? 'selected' : ''}>English</option>
@@ -1387,11 +797,7 @@ const storeData = {
             <label>${t.store}</label>
             <select class="input-field" onchange="changeStore(this.value)">
               <option value="">${t.selectStore}</option>
-              <option value="PLAZA_SING" ${state.store === 'PLAZA_SING' ? 'selected' : ''}>PLAZA SING</option>
-              <option value="PLQ_MALL" ${state.store === 'PLQ_MALL' ? 'selected' : ''}>PLQ MALL</option>
-              <option value="PLUS" ${state.store === 'PLUS' ? 'selected' : ''}>PLUS</option>
-              <option value="STAR_VISTA" ${state.store === 'STAR_VISTA' ? 'selected' : ''}>STAR VISTA</option>
-              <option value="SUNTEC_CITY" ${state.store === 'SUNTEC_CITY' ? 'selected' : ''}>SUNTEC CITY</option>
+              ${storeOrder.map(id => `<option value="${id}" ${state.store === id ? 'selected' : ''}>${(storeData[id] && storeData[id].name) || id}</option>`).join('')}
             </select>
           </div>
 
@@ -1449,7 +855,7 @@ const storeData = {
 
     function renderSuccessScreen() {
       const t = translations[state.language];
-      const storeDisplayName = state.store.replace('_', ' ');
+      const storeDisplayName = (storeData[state.store] && storeData[state.store].name) || state.store.replace('_', ' ');
       const checklistTypeText = state.checklistType === 'opening' ? t.opening : t.closing;
 
       document.getElementById('app').innerHTML = `
@@ -1549,7 +955,7 @@ const storeData = {
         timestamp: now.toISOString(),
         employeeName: state.employeeName,
         date: state.selectedDate,
-        store: state.store.replace('_', ' '),
+        store: (storeData[state.store] && storeData[state.store].name) || state.store.replace('_', ' '),
         checklistType: state.checklistType === 'opening' ?
           (state.language === 'zh' ? '开店流程' : 'Opening') :
           (state.language === 'zh' ? '关店流程' : 'Closing'),
@@ -1592,8 +998,451 @@ const storeData = {
       render();
     }
 
+    // ---- 加载 / 错误界面 ----
+    function renderLoadingScreen() {
+      const t = translations[state.language];
+      document.getElementById('app').innerHTML = `
+        <div class="header">
+          <div class="logo">🥖</div>
+          <div class="header-text">
+            <h1>${t.title}</h1>
+            <p>${t.subtitle}</p>
+          </div>
+        </div>
+        <div class="loading-screen">
+          ${dataLoadError ? `
+            <p>${t.loadError}</p>
+            <button class="submit-button" style="margin-top:16px;" onclick="loadChecklistData()">${t.retry}</button>
+          ` : `<p>${t.loading}</p>`}
+        </div>
+      `;
+    }
+
+    // ---- 管理员登录 ----
+    function openAdminLogin() {
+      state.view = 'adminLogin';
+      state.adminLoginError = false;
+      render();
+    }
+
+    function closeAdminLogin() {
+      state.view = 'checklist';
+      render();
+    }
+
+    function updateAdminPasswordInput(value) {
+      state.adminPassword = value;
+    }
+
+    async function submitAdminLogin() {
+      const pwd = document.getElementById('adminPasswordInput') ? document.getElementById('adminPasswordInput').value : state.adminPassword;
+      state.adminPassword = pwd;
+      state.adminBusy = true;
+      render();
+      try {
+        const res = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pwd })
+        });
+        if (!res.ok) throw new Error('unauthorized');
+        state.adminBusy = false;
+        state.view = 'admin';
+        state.adminTab = 'stores';
+        await loadAdminData();
+      } catch (e) {
+        state.adminBusy = false;
+        state.adminLoginError = true;
+        render();
+      }
+    }
+
+    function renderAdminLogin() {
+      const t = translations[state.language];
+      document.getElementById('app').innerHTML = `
+        <div class="header">
+          <div class="logo">🥖</div>
+          <div class="header-text">
+            <h1>${t.title}</h1>
+            <p>${t.adminLoginTitle}</p>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="input-group">
+            <label>${t.adminLoginTitle}</label>
+            <input
+              id="adminPasswordInput"
+              type="password"
+              class="input-field"
+              placeholder="${t.adminPasswordPlaceholder}"
+              onkeydown="if(event.key==='Enter'){submitAdminLogin();}"
+            />
+          </div>
+          ${state.adminLoginError ? `<p class="admin-error-text">${t.adminWrongPassword}</p>` : ''}
+          <div style="display:flex; gap:12px; margin-top:8px;">
+            <button class="reset-button" style="flex:1;" onclick="closeAdminLogin()">${t.adminCancel}</button>
+            <button class="submit-button" style="flex:1;" ${state.adminBusy ? 'disabled' : ''} onclick="submitAdminLogin()">${state.adminBusy ? t.savingText : t.adminLogin}</button>
+          </div>
+        </div>
+      `;
+      const input = document.getElementById('adminPasswordInput');
+      if (input) input.focus();
+    }
+
+    // ---- 管理后台 ----
+    function exitAdmin() {
+      state.view = 'checklist';
+      state.adminPassword = '';
+      state.adminData = null;
+      loadChecklistData();
+    }
+
+    function switchAdminTab(tab) {
+      state.adminTab = tab;
+      render();
+    }
+
+    function selectAdminStore(id) {
+      state.adminSelectedStore = id;
+      render();
+    }
+
+    function selectAdminType(type) {
+      state.adminSelectedType = type;
+      render();
+    }
+
+    async function handleAddStore() {
+      const idInput = document.getElementById('newStoreIdInput');
+      const nameInput = document.getElementById('newStoreNameInput');
+      const id = idInput.value.trim();
+      const name = nameInput.value.trim();
+      if (!id || !name) return;
+      try {
+        await adminApiCall('/api/admin/stores', {
+          method: 'POST',
+          body: JSON.stringify({ id, name })
+        });
+        await loadAdminData();
+      } catch (e) {
+        alert(translations[state.language].saveFailed + ': ' + e.message);
+      }
+    }
+
+    async function handleRenameStore(id, inputId) {
+      const t = translations[state.language];
+      const input = document.getElementById(inputId);
+      const name = input.value.trim();
+      if (!name) return;
+      try {
+        await adminApiCall('/api/admin/stores', {
+          method: 'PUT',
+          body: JSON.stringify({ id, name })
+        });
+        await loadAdminData();
+      } catch (e) {
+        alert(t.saveFailed + ': ' + e.message);
+      }
+    }
+
+    async function handleDeleteStore(id) {
+      const t = translations[state.language];
+      if (!confirm(t.deleteStoreConfirm)) return;
+      try {
+        await adminApiCall('/api/admin/stores?id=' + encodeURIComponent(id), { method: 'DELETE' });
+        if (state.adminSelectedStore === id) state.adminSelectedStore = '';
+        await loadAdminData();
+      } catch (e) {
+        alert(t.saveFailed + ': ' + e.message);
+      }
+    }
+
+    async function handleAddCategory() {
+      const t = translations[state.language];
+      const zhInput = document.getElementById('newCategoryZhInput');
+      const enInput = document.getElementById('newCategoryEnInput');
+      const category_zh = zhInput.value.trim();
+      const category_en = enInput.value.trim();
+      if (!category_zh || !category_en) return;
+      try {
+        await adminApiCall('/api/admin/categories', {
+          method: 'POST',
+          body: JSON.stringify({
+            store_id: state.adminSelectedStore,
+            checklist_type: state.adminSelectedType,
+            category_zh, category_en
+          })
+        });
+        await loadAdminData();
+      } catch (e) {
+        alert(t.saveFailed + ': ' + e.message);
+      }
+    }
+
+    async function handleEditCategory(id, zhInputId, enInputId) {
+      const t = translations[state.language];
+      const category_zh = document.getElementById(zhInputId).value.trim();
+      const category_en = document.getElementById(enInputId).value.trim();
+      if (!category_zh || !category_en) return;
+      try {
+        await adminApiCall('/api/admin/categories', {
+          method: 'PUT',
+          body: JSON.stringify({ id, category_zh, category_en })
+        });
+        await loadAdminData();
+      } catch (e) {
+        alert(t.saveFailed + ': ' + e.message);
+      }
+    }
+
+    async function handleDeleteCategory(id) {
+      const t = translations[state.language];
+      if (!confirm(t.deleteCategoryConfirm)) return;
+      try {
+        await adminApiCall('/api/admin/categories?id=' + encodeURIComponent(id), { method: 'DELETE' });
+        await loadAdminData();
+      } catch (e) {
+        alert(t.saveFailed + ': ' + e.message);
+      }
+    }
+
+    async function handleMoveCategory(catId, direction) {
+      const cats = state.adminData.categories
+        .filter(c => c.store_id === state.adminSelectedStore && c.checklist_type === state.adminSelectedType)
+        .sort((a, b) => a.sort_order - b.sort_order);
+      const idx = cats.findIndex(c => c.id === catId);
+      const swapIdx = idx + direction;
+      if (idx < 0 || swapIdx < 0 || swapIdx >= cats.length) return;
+      const a = cats[idx], b = cats[swapIdx];
+      try {
+        await Promise.all([
+          adminApiCall('/api/admin/categories', { method: 'PUT', body: JSON.stringify({ id: a.id, sort_order: b.sort_order }) }),
+          adminApiCall('/api/admin/categories', { method: 'PUT', body: JSON.stringify({ id: b.id, sort_order: a.sort_order }) })
+        ]);
+        await loadAdminData();
+      } catch (e) {
+        alert(translations[state.language].saveFailed + ': ' + e.message);
+      }
+    }
+
+    async function handleAddItem(categoryId) {
+      const t = translations[state.language];
+      const zhInput = document.getElementById('newItemZhInput-' + categoryId);
+      const enInput = document.getElementById('newItemEnInput-' + categoryId);
+      const zh = zhInput.value.trim();
+      const en = enInput.value.trim();
+      if (!zh || !en) return;
+      try {
+        await adminApiCall('/api/admin/items', {
+          method: 'POST',
+          body: JSON.stringify({ category_id: categoryId, zh, en })
+        });
+        await loadAdminData();
+      } catch (e) {
+        alert(t.saveFailed + ': ' + e.message);
+      }
+    }
+
+    async function handleEditItem(id, zhInputId, enInputId) {
+      const t = translations[state.language];
+      const zh = document.getElementById(zhInputId).value.trim();
+      const en = document.getElementById(enInputId).value.trim();
+      if (!zh || !en) return;
+      try {
+        await adminApiCall('/api/admin/items', {
+          method: 'PUT',
+          body: JSON.stringify({ id, zh, en })
+        });
+        await loadAdminData();
+      } catch (e) {
+        alert(t.saveFailed + ': ' + e.message);
+      }
+    }
+
+    async function handleDeleteItem(id) {
+      const t = translations[state.language];
+      if (!confirm(t.deleteItemConfirm)) return;
+      try {
+        await adminApiCall('/api/admin/items?id=' + encodeURIComponent(id), { method: 'DELETE' });
+        await loadAdminData();
+      } catch (e) {
+        alert(t.saveFailed + ': ' + e.message);
+      }
+    }
+
+    async function handleMoveItem(itemId, categoryId, direction) {
+      const items = state.adminData.items
+        .filter(it => it.category_id === categoryId)
+        .sort((a, b) => a.sort_order - b.sort_order);
+      const idx = items.findIndex(it => it.id === itemId);
+      const swapIdx = idx + direction;
+      if (idx < 0 || swapIdx < 0 || swapIdx >= items.length) return;
+      const a = items[idx], b = items[swapIdx];
+      try {
+        await Promise.all([
+          adminApiCall('/api/admin/items', { method: 'PUT', body: JSON.stringify({ id: a.id, sort_order: b.sort_order }) }),
+          adminApiCall('/api/admin/items', { method: 'PUT', body: JSON.stringify({ id: b.id, sort_order: a.sort_order }) })
+        ]);
+        await loadAdminData();
+      } catch (e) {
+        alert(translations[state.language].saveFailed + ': ' + e.message);
+      }
+    }
+
+    function renderAdminPanel() {
+      const t = translations[state.language];
+      if (!state.adminData) {
+        document.getElementById('app').innerHTML = `
+          <div class="header">
+            <div class="logo">🥖</div>
+            <div class="header-text"><h1>${t.title}</h1><p>${t.adminPanelTitle}</p></div>
+          </div>
+          <div class="loading-screen"><p>${t.loading}</p></div>
+        `;
+        return;
+      }
+
+      const stores = state.adminData.stores.slice().sort((a, b) => a.sort_order - b.sort_order);
+
+      let bodyHtml = '';
+      if (state.adminTab === 'stores') {
+        bodyHtml = `
+          <div class="admin-block">
+            <h3>${t.storesTab}</h3>
+            ${stores.map(s => `
+              <div class="admin-store-card">
+                <input class="input-field" id="storeNameInput-${s.id}" value="${s.name.replace(/"/g, '&quot;')}" style="width:100%;" />
+                <div class="admin-store-card-footer">
+                  <span class="admin-store-id">${s.id}</span>
+                  <button class="admin-btn admin-btn-save" onclick="handleRenameStore('${s.id}', 'storeNameInput-${s.id}')">${t.renameStoreBtn}</button>
+                  <button class="admin-btn admin-btn-danger" onclick="handleDeleteStore('${s.id}')">${t.deleteStoreBtn}</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+          <div class="admin-block">
+            <h4>${t.addStore}</h4>
+            <div class="input-group">
+              <label>${t.storeIdLabel}</label>
+              <input id="newStoreIdInput" class="input-field" placeholder="CITY_HALL" />
+            </div>
+            <div class="input-group">
+              <label>${t.storeNameLabel}</label>
+              <input id="newStoreNameInput" class="input-field" placeholder="City Hall" />
+            </div>
+            <button class="submit-button" onclick="handleAddStore()">${t.addStoreBtn}</button>
+          </div>
+        `;
+      } else {
+        const catsForStore = state.adminSelectedStore
+          ? state.adminData.categories
+              .filter(c => c.store_id === state.adminSelectedStore && c.checklist_type === state.adminSelectedType)
+              .sort((a, b) => a.sort_order - b.sort_order)
+          : [];
+
+        bodyHtml = `
+          <div class="admin-block">
+            <h3>${t.itemsTab}</h3>
+            <div class="input-group">
+              <label>${t.store}</label>
+              <select class="input-field" onchange="selectAdminStore(this.value)">
+                <option value="">${t.selectStorePrompt}</option>
+                ${stores.map(s => `<option value="${s.id}" ${state.adminSelectedStore === s.id ? 'selected' : ''}>${s.name}</option>`).join('')}
+              </select>
+            </div>
+            ${state.adminSelectedStore ? `
+              <div class="input-group">
+                <label>${t.selectTypeForItems}</label>
+                <select class="input-field" onchange="selectAdminType(this.value)">
+                  <option value="opening" ${state.adminSelectedType === 'opening' ? 'selected' : ''}>${t.opening}</option>
+                  <option value="closing" ${state.adminSelectedType === 'closing' ? 'selected' : ''}>${t.closing}</option>
+                </select>
+              </div>
+            ` : ''}
+          </div>
+
+          ${state.adminSelectedStore ? `
+            ${catsForStore.map((cat, ci) => {
+              const itemsForCat = state.adminData.items
+                .filter(it => it.category_id === cat.id)
+                .sort((a, b) => a.sort_order - b.sort_order);
+              return `
+                <div class="category admin-category">
+                  <div class="category-title admin-category-title">
+                    <div class="admin-category-inputs">
+                      <input class="input-field admin-inline-input" id="catZhInput-${cat.id}" value="${cat.category_zh.replace(/"/g, '&quot;')}" placeholder="${t.categoryZhLabel}" />
+                      <input class="input-field admin-inline-input" id="catEnInput-${cat.id}" value="${cat.category_en.replace(/"/g, '&quot;')}" placeholder="${t.categoryEnLabel}" />
+                    </div>
+                    <div class="admin-category-toolbar">
+                    <button class="admin-btn admin-btn-save" onclick="handleEditCategory(${cat.id}, 'catZhInput-${cat.id}', 'catEnInput-${cat.id}')">${t.save}</button>
+                    <button class="admin-btn" onclick="handleMoveCategory(${cat.id}, -1)" ${ci === 0 ? 'disabled' : ''}>↑</button>
+                    <button class="admin-btn" onclick="handleMoveCategory(${cat.id}, 1)" ${ci === catsForStore.length - 1 ? 'disabled' : ''}>↓</button>
+                    <button class="admin-btn admin-btn-danger" onclick="handleDeleteCategory(${cat.id})">${t.delete}</button>
+                    </div>
+                  </div>
+                  <div class="items">
+                    ${itemsForCat.map((item, ii) => `
+                      <div class="admin-item-card">
+                        <div class="admin-category-inputs">
+                          <input class="input-field" id="itemZhInput-${item.id}" value="${item.zh.replace(/"/g, '&quot;')}" style="flex:1;" />
+                          <input class="input-field" id="itemEnInput-${item.id}" value="${item.en.replace(/"/g, '&quot;')}" style="flex:1;" />
+                        </div>
+                        <div class="admin-category-toolbar">
+                          <button class="admin-btn admin-btn-save" onclick="handleEditItem(${item.id}, 'itemZhInput-${item.id}', 'itemEnInput-${item.id}')">${t.save}</button>
+                          <button class="admin-btn" onclick="handleMoveItem(${item.id}, ${cat.id}, -1)" ${ii === 0 ? 'disabled' : ''}>↑</button>
+                          <button class="admin-btn" onclick="handleMoveItem(${item.id}, ${cat.id}, 1)" ${ii === itemsForCat.length - 1 ? 'disabled' : ''}>↓</button>
+                          <button class="admin-btn admin-btn-danger" onclick="handleDeleteItem(${item.id})">${t.delete}</button>
+                        </div>
+                      </div>
+                    `).join('')}
+                    <div class="admin-item-card admin-add-row">
+                      <div class="admin-category-inputs">
+                        <input class="input-field" id="newItemZhInput-${cat.id}" placeholder="${t.itemZhLabel}" style="flex:1;" />
+                        <input class="input-field" id="newItemEnInput-${cat.id}" placeholder="${t.itemEnLabel}" style="flex:1;" />
+                      </div>
+                      <button class="admin-btn admin-btn-save" onclick="handleAddItem(${cat.id})">${t.addItemBtn}</button>
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+            <div class="admin-block">
+              <h4>${t.addCategory}</h4>
+              <div class="input-group">
+                <label>${t.categoryZhLabel}</label>
+                <input id="newCategoryZhInput" class="input-field" />
+              </div>
+              <div class="input-group">
+                <label>${t.categoryEnLabel}</label>
+                <input id="newCategoryEnInput" class="input-field" />
+              </div>
+              <button class="submit-button" onclick="handleAddCategory()">${t.addCategoryBtn}</button>
+            </div>
+          ` : ''}
+        `;
+      }
+
+      document.getElementById('app').innerHTML = `
+        <div class="header">
+          <div class="logo">🥖</div>
+          <div class="header-text">
+            <h1>${t.title}</h1>
+            <p>${t.adminPanelTitle}</p>
+          </div>
+          <button class="admin-gear-btn" onclick="exitAdmin()" title="${t.backToChecklist}">✕</button>
+        </div>
+        <div class="admin-tabs">
+          <button class="admin-tab-btn ${state.adminTab === 'stores' ? 'active' : ''}" onclick="switchAdminTab('stores')">${t.storesTab}</button>
+          <button class="admin-tab-btn ${state.adminTab === 'items' ? 'active' : ''}" onclick="switchAdminTab('items')">${t.itemsTab}</button>
+        </div>
+        <div class="form-section admin-panel-body">
+          ${bodyHtml}
+        </div>
+      `;
+    }
+
     // 初始化
-    render();
+    loadChecklistData();
   </script>
 </body>
 </html>
